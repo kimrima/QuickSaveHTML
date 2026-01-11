@@ -10,7 +10,8 @@
       gtag('config', 'G-VVHGGEGNY7');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Code Diff Checker - QuickSaveHTML</title>
+    <title>Code & Text Diff Checker - QuickSaveHTML</title>
+    <meta name="description" content="Instant side-by-side code and text comparison tool. Fast, secure, and easy to use.">
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2706292385168262" crossorigin="anonymous"></script>
 
@@ -31,38 +32,37 @@
         header { height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
         h1 { margin: 0; font-size: 16px; color: #fff; }
         .tag { background: var(--primary); font-size: 10px; padding: 2px 6px; border-radius: 4px; color: white; margin-left: 8px; }
-
-        /* Workspace (Input Area) */
+        
+        .controls { display: flex; align-items: center; gap: 15px; }
+        .checkbox-label { font-size: 12px; color: var(--text-sub); display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+        .checkbox-label:hover { color: white; }
+        
+        /* Workspace */
         .workspace { display: flex; flex: 1; height: calc(100vh - 90px); }
         .input-col { width: 50%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
         .pane-title { background: var(--bg-panel); padding: 8px 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); border-bottom: 1px solid var(--border); }
         textarea { flex: 1; background: var(--bg-dark); color: #e5e7eb; border: none; padding: 15px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
 
-        /* Result Overlay (Split View Style) */
+        /* Result Overlay */
         .output-overlay { position: fixed; top: 90px; left: 0; width: 100%; height: calc(100% - 90px); background: var(--bg-dark); z-index: 50; display: none; flex-direction: column; }
         .output-header { padding: 10px 20px; background: #0f172a; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         
-        /* 🔥 좌우 분할 핵심 CSS */
         .diff-split-container { display: flex; flex: 1; overflow: auto; background: #111; }
         .diff-pane { width: 50%; display: flex; flex-direction: column; border-right: 1px solid #333; }
         .diff-pane.right { border-right: none; }
         
-        /* 코드 한 줄 스타일 */
-        .code-row { display: flex; height: 24px; line-height: 24px; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; white-space: pre; }
-        
-        /* 줄 번호 */
-        .line-num { width: 40px; min-width: 40px; text-align: right; padding-right: 10px; color: #4b5563; background: #1e1e1e; border-right: 1px solid #333; user-select: none; font-size: 11px; box-sizing: border-box; }
-        
-        /* 코드 내용 */
-        .line-content { flex: 1; padding-left: 10px; color: #d1d5db; overflow: hidden; }
+        .code-row { display: flex; min-height: 24px; line-height: 24px; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; }
+        .line-num { width: 40px; min-width: 40px; text-align: right; padding-right: 10px; color: #4b5563; background: #1e1e1e; border-right: 1px solid #333; user-select: none; font-size: 11px; }
+        .line-content { flex: 1; padding-left: 10px; color: #d1d5db; }
 
-        /* 색상 하이라이트 */
-        .removed-bg { background-color: rgba(220, 38, 38, 0.2); } /* 빨간색 배경 (삭제) */
-        .added-bg { background-color: rgba(5, 150, 105, 0.2); }   /* 초록색 배경 (추가) */
-        .empty-bg { background-color: #161b22; }                  /* 빈 공간 (짝 맞추기용) */
+        .removed-bg { background-color: rgba(220, 38, 38, 0.25); } 
+        .added-bg { background-color: rgba(5, 150, 105, 0.25); }   
+        .empty-bg { background-color: #0d1117; }                  
 
-        button.action-btn { background: var(--primary); color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        button.action-btn { background: var(--primary); color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
+        button.action-btn:hover { background: #1d4ed8; }
         button.close-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+        button.close-btn:hover { border-color: white; color: white; }
     </style>
 </head>
 <body>
@@ -72,24 +72,29 @@
     </div>
 
     <header>
-        <h1>AI Code Diff <span class="tag">BETA</span></h1>
-        <button class="action-btn" onclick="compareCode()">Compare Side-by-Side <i class="fas fa-columns"></i></button>
+        <h1>Smart Diff Checker <span class="tag">BETA</span></h1>
+        <div class="controls">
+            <label class="checkbox-label">
+                <input type="checkbox" id="ignoreWhitespace"> Ignore Whitespace
+            </label>
+            <button class="action-btn" onclick="compareCode()">Compare <i class="fas fa-arrow-right"></i></button>
+        </div>
     </header>
 
     <div class="workspace">
         <div class="input-col">
-            <div class="pane-title">1. Original Code (삭제된 부분은 빨간색🟥)</div>
-            <textarea id="oldCode" placeholder="여기에 원본 코드를 붙여넣으세요..."></textarea>
+            <div class="pane-title">1. Original Version (Left Side)</div>
+            <textarea id="oldCode" placeholder="Paste your original code or text here..."></textarea>
         </div>
         <div class="input-col" style="border-right:none;">
-            <div class="pane-title">2. New AI Code (추가된 부분은 초록색🟩)</div>
-            <textarea id="newCode" placeholder="여기에 AI가 고쳐준 코드를 붙여넣으세요..."></textarea>
+            <div class="pane-title">2. Modified Version (Right Side)</div>
+            <textarea id="newCode" placeholder="Paste your modified version here to compare..."></textarea>
         </div>
     </div>
 
     <div class="output-overlay" id="resultView">
         <div class="output-header">
-            <span style="font-weight:bold; color:white;"><i class="fas fa-columns"></i> Split Comparison View</span>
+            <span style="font-weight:bold; color:white;"><i class="fas fa-columns"></i> Comparison Result</span>
             <button class="close-btn" onclick="closeResult()">Close X</button>
         </div>
         
@@ -100,18 +105,21 @@
     </div>
 
     <script>
-        // HTML 태그가 그대로 나오지 않게 안전하게 변환하는 함수
+        // Safely escape HTML characters
         function escapeHtml(text) {
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
+        // Comparison logic
         function compareCode() {
             const oldText = document.getElementById('oldCode').value;
             const newText = document.getElementById('newCode').value;
+            const ignoreSpace = document.getElementById('ignoreWhitespace').checked;
             
-            if(!oldText && !newText) return alert("비교할 코드를 입력해주세요!");
+            if(!oldText && !newText) return alert("Please enter text to compare!");
 
-            const diff = Diff.diffLines(oldText, newText);
+            // Calculate diff
+            const diff = Diff.diffLines(oldText, newText, { ignoreWhitespace: ignoreSpace });
             
             const leftPane = document.getElementById('leftPane');
             const rightPane = document.getElementById('rightPane');
@@ -123,25 +131,23 @@
             let rightCount = 1;
 
             diff.forEach((part) => {
-                // 줄바꿈 문자 제거하고 한 줄씩 배열로 만듦
                 const lines = part.value.replace(/\n$/, '').split('\n');
-                const colorClass = part.added ? 'added-bg' : part.removed ? 'removed-bg' : '';
-
+                
                 lines.forEach((line) => {
-                    const safeLine = escapeHtml(line) || '&nbsp;'; // 빈 줄 처리
+                    const safeLine = escapeHtml(line) || '&nbsp;';
 
                     if (part.removed) {
-                        // 삭제된 경우: 왼쪽에만 빨간색으로 표시, 오른쪽은 빈칸
+                        // Deleted lines (Red)
                         leftHTML += createRow(leftCount++, safeLine, 'removed-bg');
-                        rightHTML += createRow('', '', 'empty-bg'); // 오른쪽은 텅 빈 박스
+                        rightHTML += createRow('', '', 'empty-bg');
                     } 
                     else if (part.added) {
-                        // 추가된 경우: 왼쪽은 빈칸, 오른쪽에만 초록색으로 표시
-                        leftHTML += createRow('', '', 'empty-bg'); // 왼쪽은 텅 빈 박스
-                        rightHTML += createRow(rightCount++, safeLine, 'added-bg');
+                        // New lines (Green)
+                        leftHTML += createRow('', '', 'empty-bg');
+                        rightHTML += rightHTML_row = createRow(rightCount++, safeLine, 'added-bg');
                     } 
                     else {
-                        // 변경 없음: 양쪽에 똑같이 표시
+                        // Unchanged lines
                         leftHTML += createRow(leftCount++, safeLine, '');
                         rightHTML += createRow(rightCount++, safeLine, '');
                     }
@@ -154,7 +160,7 @@
             document.getElementById('resultView').style.display = 'flex';
         }
 
-        // HTML 조각 만드는 헬퍼 함수
+        // Helper to generate row HTML
         function createRow(num, content, bgClass) {
             return `<div class="code-row ${bgClass}">
                         <div class="line-num">${num}</div>
