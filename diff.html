@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVHGGEGNY7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VVHGGEGNY7');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Diff Checker - QuickSaveHTML</title>
+    <meta name="description" content="Compare code snippets instantly. Best for checking AI-generated code changes.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2706292385168262" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #2563eb; --bg-dark: #111827; --bg-panel: #1f2937; --text-main: #f3f4f6; --text-sub: #9ca3af; --border: #374151; --added-bg: #064e3b; --removed-bg: #7f1d1d; }
+        body { margin: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Nav Bar */
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; }
+        .nav-link { text-decoration: none; color: var(--text-sub); transition: 0.2s; display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+        .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
+
+        /* Main Layout */
+        header { height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
+        h1 { margin: 0; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .tag { background: var(--primary); font-size: 10px; padding: 2px 6px; border-radius: 4px; color: white; font-weight: bold; }
+        
+        .workspace { display: flex; flex: 1; height: calc(100vh - 120px); }
+        .input-col { width: 50%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+        .pane-title { background: var(--bg-panel); padding: 8px 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        
+        textarea { flex: 1; background: var(--bg-dark); color: #e5e7eb; border: none; padding: 15px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
+        textarea:focus { background: #1a2233; }
+
+        .output-overlay { position: fixed; top: 90px; left: 0; width: 100%; height: calc(100% - 120px); background: var(--bg-dark); z-index: 50; display: none; flex-direction: column; }
+        .output-header { padding: 10px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .diff-container { flex: 1; overflow: auto; padding: 20px; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
+        
+        /* Diff Colors */
+        .diff-line { white-space: pre-wrap; word-break: break-all; }
+        .diff-added { background-color: rgba(16, 185, 129, 0.2); color: #86efac; }
+        .diff-removed { background-color: rgba(239, 68, 68, 0.2); color: #fca5a5; text-decoration: line-through; opacity: 0.7; }
+        .diff-unchanged { color: #9ca3af; }
+
+        button.action-btn { background: var(--primary); color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
+        button.action-btn:hover { background: #1d4ed8; }
+        button.close-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+        button.close-btn:hover { border-color: white; color: white; }
+
+        footer { height: 30px; background: var(--bg-panel); border-top: 1px solid var(--border); display: flex; justify-content: center; align-items: center; gap: 20px; font-size: 11px; color: var(--text-sub); }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link"><i class="fas fa-code"></i> Editor</a>
+        <a href="diff.html" class="nav-link active"><i class="fas fa-exchange-alt"></i> Diff Checker</a>
+    </div>
+
+    <header>
+        <h1>AI Code Diff <span class="tag">BETA</span></h1>
+        <button class="action-btn" onclick="compareCode()">Compare Now <i class="fas fa-arrow-right"></i></button>
+    </header>
+
+    <div class="workspace">
+        <div class="input-col">
+            <div class="pane-title">1. Original Code (Before)</div>
+            <textarea id="oldCode" placeholder="Paste your old code here..."></textarea>
+        </div>
+        <div class="input-col" style="border-right:none;">
+            <div class="pane-title">2. New AI Code (After)</div>
+            <textarea id="newCode" placeholder="Paste the new code from ChatGPT here..."></textarea>
+        </div>
+    </div>
+
+    <div class="output-overlay" id="resultView">
+        <div class="output-header">
+            <span style="font-weight:bold; color:white;"><i class="fas fa-check-circle"></i> Comparison Result</span>
+            <button class="close-btn" onclick="closeResult()">Close X</button>
+        </div>
+        <div class="diff-container" id="diffOutput"></div>
+    </div>
+
+    <footer>
+        <span style="cursor:default;">© 2026 QuickSaveHTML</span>
+    </footer>
+
+    <script>
+        function compareCode() {
+            const oldText = document.getElementById('oldCode').value;
+            const newText = document.getElementById('newCode').value;
+            
+            if(!oldText && !newText) return alert("Please paste some code first!");
+
+            // Diff Logic using jsdiff library
+            const diff = Diff.diffLines(oldText, newText);
+            const display = document.getElementById('diffOutput');
+            const resultView = document.getElementById('resultView');
+            
+            display.innerHTML = ''; // Clear previous
+
+            diff.forEach((part) => {
+                const colorClass = part.added ? 'diff-added' :
+                                   part.removed ? 'diff-removed' : 'diff-unchanged';
+                
+                // 줄바꿈 처리해서 한 줄씩 출력
+                /* span으로 감싸서 스타일 적용 */
+                const span = document.createElement('div');
+                span.className = 'diff-line ' + colorClass;
+                span.appendChild(document.createTextNode(part.value));
+                display.appendChild(span);
+            });
+
+            resultView.style.display = 'flex';
+        }
+
+        function closeResult() {
+            document.getElementById('resultView').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
