@@ -3,119 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVHGGEGNY7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-VVHGGEGNY7');
-</script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VVHGGEGNY7');
+    </script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="QuickSaveHTML - Instant HTML File Generator with Live Preview.">
+    <meta name="naver-site-verification" content="e024b70b6af54945ebdced0e9da618b0573f31fb" />
+    
     <title>QuickSaveHTML - Editor & Saver</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 
     <link rel="canonical" href="https://quicksavehtml.com">
     <meta name="robots" content="index, follow">
-    <meta name="keywords" content="HTML editor, online html preview, html saver, simple code editor, web development tool">
+    <meta name="keywords" content="HTML editor, online html preview, html saver, web development tool">
     <meta name="author" content="QuickSaveHTML">
-
-    <meta name="naver-site-verification" content="e024b70b6af54945ebdced0e9da618b0573f31fb" /> 
     
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://quicksavehtml.com">
     <meta property="og:title" content="QuickSaveHTML - Free Editor & Saver">
-    <meta property="og:description" content="Instant HTML File Generator with Live Preview. Write code and download immediately.">
+    <meta property="og:description" content="Instant HTML File Generator with Live Preview.">
     <meta property="og:site_name" content="QuickSaveHTML">
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2706292385168262"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2706292385168262" crossorigin="anonymous"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #2563eb; --danger: #ef4444; --success: #10b981; --bg-dark: #111827; --bg-panel: #1f2937; --text-main: #f3f4f6; --text-sub: #9ca3af; --border: #374151; }
+        :root { --primary: #2563eb; --danger: #ef4444; --bg-dark: #111827; --bg-panel: #1f2937; --text-main: #f3f4f6; --text-sub: #9ca3af; --border: #374151; }
         body { margin: 0; display: flex; flex-direction: column; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-dark); color: var(--text-main); overflow: hidden; }
-        body.is-resizing { user-select: none; cursor: col-resize; }
-
-        /* Header */
-        header { height: 60px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); z-index: 10; user-select: none; }
         
-        /* 🔥 H1 태그로 변경하면서 디자인 유지 (margin:0 중요) */
-        .logo { font-weight: 800; font-size: 18px; color: #60a5fa; display: flex; align-items: center; gap: 8px; margin: 0; }
-        .logo span { color: white; }
-        .toolbar { display: flex; gap: 8px; align-items: center; }
+        /* 🔥 New Nav Bar */
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; }
+        .nav-link { text-decoration: none; color: var(--text-sub); transition: 0.2s; display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+        .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
 
-        /* Inputs & Buttons */
+        /* Header & Main Layout */
+        header { height: 50px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10; }
+        h1.logo { font-weight: 800; font-size: 16px; color: #60a5fa; margin: 0; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: white; }
+        
+        .toolbar { display: flex; gap: 8px; align-items: center; }
         .filename-wrapper { position: relative; display: flex; align-items: center; }
         .extension { position: absolute; right: 10px; color: var(--text-sub); font-size: 12px; pointer-events: none; }
-        input#filename-input { background: var(--bg-dark); border: 1px solid var(--border); color: #fff; padding: 8px 45px 8px 12px; border-radius: 6px; outline: none; width: 130px; font-size: 13px; transition: border 0.2s; }
+        input#filename-input { background: var(--bg-dark); border: 1px solid var(--border); color: #fff; padding: 6px 45px 6px 12px; border-radius: 6px; outline: none; width: 120px; font-size: 13px; }
         input#filename-input:focus { border-color: var(--primary); }
 
-        button { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-sub); padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; font-size: 13px; }
+        button { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-sub); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; font-size: 12px; }
         button:hover { background: var(--border); color: white; }
-        button.primary { background: var(--primary); border: none; color: white; font-weight: 600; padding: 8px 16px; box-shadow: 0 0 15px rgba(37, 99, 235, 0.3); }
-        button.primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+        button.primary { background: var(--primary); border: none; color: white; font-weight: 600; }
+        button.primary:hover { background: #1d4ed8; }
         button.danger:hover { color: #ef4444; border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-        
         button.device-btn.active { background: #e5e7eb; color: var(--primary); border-color: #d1d5db; }
 
-        /* Layout (Footer 추가로 높이 조정) */
-        .workspace { display: flex; flex: 1; height: calc(100vh - 90px); position: relative; }
+        .workspace { display: flex; flex: 1; height: calc(100vh - 120px); position: relative; }
         .editor-pane { width: 40%; min-width: 200px; display: flex; flex-direction: column; background: var(--bg-dark); }
-        .pane-header { padding: 8px 16px; background: var(--bg-panel); font-size: 11px; font-weight: 600; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 0.5px; height: 35px;}
+        .pane-header { padding: 8px 16px; background: var(--bg-panel); font-size: 11px; font-weight: 600; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 30px;}
         textarea { flex: 1; background: transparent; color: #e5e7eb; border: none; padding: 20px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
-
+        
         .resizer { width: 5px; background: var(--bg-panel); cursor: col-resize; transition: background 0.2s; z-index: 20; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
         .resizer:hover, .resizer.resizing { background: var(--primary); }
 
         .preview-pane { flex: 1; min-width: 200px; background: #e5e7eb; display: flex; flex-direction: column; position: relative; }
-        .preview-header { background: #fff; border-bottom: 1px solid #d1d5db; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; height: 51px; box-sizing: border-box;}
+        .preview-header { background: #fff; border-bottom: 1px solid #d1d5db; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; height: 46px; box-sizing: border-box;}
         
         .iframe-container { flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding: 20px; box-sizing: border-box; }
-        .iframe-wrapper { width: 100%; height: 100%; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: none; }
-        .iframe-wrapper.mobile-mode { width: 375px; height: 667px; border: 10px solid #333; border-radius: 36px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; display: block; border-radius: inherit; }
+        .iframe-wrapper { width: 100%; height: 100%; transition: all 0.3s; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .iframe-wrapper.mobile-mode { width: 375px; height: 667px; border: 10px solid #333; border-radius: 36px; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
         .drag-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; display: none; cursor: col-resize; }
+        body.is-resizing { user-select: none; cursor: col-resize; }
 
-        /* Footer Style */
         footer { height: 30px; background: var(--bg-panel); border-top: 1px solid var(--border); display: flex; justify-content: center; align-items: center; gap: 20px; font-size: 11px; color: var(--text-sub); }
         footer span { cursor: pointer; transition: 0.2s; }
         footer span:hover { color: var(--primary); text-decoration: underline; }
 
-        /* Modals */
+        /* Modal Styles (Same as before) */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .modal-box { background: white; width: 380px; padding: 30px; border-radius: 16px; text-align: center; color: #333; box-shadow: 0 20px 50px rgba(0,0,0,0.4); animation: popIn 0.2s ease-out; max-height: 80vh; overflow-y: auto; }
+        .modal-box { background: white; width: 380px; padding: 30px; border-radius: 16px; text-align: center; color: #333; box-shadow: 0 20px 50px rgba(0,0,0,0.4); max-height: 80vh; overflow-y: auto; }
         .text-left { text-align: left; font-size: 12px; line-height: 1.6; color: #4b5563; }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        
         .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .ad-space { width: 100%; height: 200px; background: #f3f4f6; margin: 20px 0; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 12px; border: 2px dashed #d1d5db; color: #6b7280; font-size: 13px; }
-
         .modal-btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 25px; }
         .modal-btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 14px; }
         .modal-btn.cancel { background: #f3f4f6; color: #4b5563; }
-        .modal-btn.cancel:hover { background: #e5e7eb; }
         .modal-btn.confirm { background: var(--danger); color: white; }
-        .modal-btn.confirm:hover { background: #dc2626; }
 
-        /* Toast */
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 2000; display: flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 2000; display: flex; align-items: center; gap: 8px; }
         .toast.show { opacity: 1; bottom: 40px; }
     </style>
 </head>
 <body>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link active"><i class="fas fa-code"></i> Editor</a>
+        <a href="diff.html" class="nav-link"><i class="fas fa-exchange-alt"></i> Diff Checker</a>
+    </div>
+
     <header>
         <h1 class="logo"><i class="fas fa-bolt"></i> QuickSave<span>Html</span></h1>
-        
         <div class="toolbar">
             <div class="filename-wrapper">
                 <input type="text" id="filename-input" value="index" placeholder="filename">
                 <span class="extension">.html</span>
             </div>
-            
             <button class="danger" onclick="openResetModal()" title="Reset"><i class="fas fa-trash-alt"></i></button>
             <button onclick="copyCode()" title="Copy"><i class="far fa-copy"></i></button>
             <button class="primary" onclick="startDownloadProcess()"><i class="fas fa-download"></i> Download</button>
@@ -124,10 +119,7 @@
 
     <div class="workspace" id="workspace">
         <div class="editor-pane" id="editorPane">
-            <div class="pane-header">
-                <span><i class="fas fa-code"></i> Code</span>
-                <span style="opacity: 0.6; font-size: 10px;">Paste Here</span>
-            </div>
+            <div class="pane-header"><span><i class="fas fa-code"></i> Code</span></div>
             <textarea id="code" placeholder=""></textarea>
         </div>
         <div class="resizer" id="resizer"></div>
@@ -135,76 +127,51 @@
             <div class="pane-header preview-header">
                 <span><i class="fas fa-desktop"></i> Preview</span>
                 <div style="display: flex; gap: 5px;">
-                    <button class="device-btn active" onclick="setDevice('desktop')" title="Desktop View"><i class="fas fa-desktop"></i></button>
-                    <button class="device-btn" onclick="setDevice('mobile')" title="Mobile View"><i class="fas fa-mobile-alt"></i></button>
+                    <button class="device-btn active" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
+                    <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
                 </div>
             </div>
             <div class="iframe-container">
-                <div class="iframe-wrapper" id="iframeWrapper">
-                    <iframe id="preview"></iframe>
-                </div>
+                <div class="iframe-wrapper" id="iframeWrapper"><iframe id="preview"></iframe></div>
             </div>
             <div class="drag-overlay" id="dragOverlay"></div>
         </div>
     </div>
 
     <footer>
-        <span onclick="openModal('privacyModal')">Privacy Policy</span>
-        <span>|</span>
-        <span onclick="openModal('termsModal')">Terms of Service</span>
-        <span>|</span>
-        <span style="cursor:default;">© 2024 QuickSaveHTML</span>
+        <span onclick="openModal('privacyModal')">Privacy Policy</span><span>|</span><span onclick="openModal('termsModal')">Terms of Service</span><span>|</span><span style="cursor:default;">© 2026 QuickSaveHTML</span>
     </footer>
 
     <div class="modal-overlay" id="downloadModal">
         <div class="modal-box">
-            <h2 style="margin:0; font-size: 18px; font-weight: 700;">Preparing...</h2>
-            <div class="ad-space">
-                <div>🚀 Launch your site?</div>
-                <div style="font-size: 11px;">Affiliate Banner Here</div>
-            </div>
+            <h2>Preparing...</h2>
+            <div class="ad-space"><div>🚀 Launch your site?</div><div style="font-size: 11px;">Ads will appear here</div></div>
             <div class="loading-spinner" id="spinner"></div>
-            <div id="download-msg" style="font-weight:bold; color:var(--primary); display:none; margin-top:20px;">Done!</div>
+            <div id="download-msg" style="display:none; margin-top:20px; color:var(--primary); font-weight:bold;">Done!</div>
         </div>
     </div>
-
     <div class="modal-overlay" id="resetModal">
         <div class="modal-box" style="width: 320px;">
             <div style="font-size: 40px; color: #ef4444; margin-bottom: 10px;"><i class="fas fa-exclamation-circle"></i></div>
-            <h2 style="margin:0; font-size: 18px; font-weight: 700;">Clear everything?</h2>
-            <p style="color:#666; font-size:14px; margin: 10px 0 20px 0;">This action cannot be undone.</p>
+            <h2>Clear everything?</h2>
             <div class="modal-btn-group">
                 <button class="modal-btn cancel" onclick="closeResetModal()">Cancel</button>
                 <button class="modal-btn confirm" onclick="confirmReset()">Yes, Clear</button>
             </div>
         </div>
     </div>
-
     <div class="modal-overlay" id="privacyModal">
         <div class="modal-box text-left">
-            <h2 style="margin-top:0;">Privacy Policy</h2>
-            <p><strong>Last updated: January 2026</strong></p>
-            <p>QuickSaveHTML ("we", "our") operates quicksavehtml.com. This page informs you of our policies regarding the collection, use, and disclosure of Personal Information we receive from users of the Site.</p>
-            <p><strong>1. Information Collection</strong><br>We do not store any code you write on our servers. All editing happens locally in your browser. However, we use third-party services like Google AdSense which may collect data (cookies) to serve ads.</p>
-            <p><strong>2. Google AdSense</strong><br>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to your website or other websites. You may opt-out of personalized advertising by visiting Google's Ads Settings.</p>
-            <div class="modal-btn-group">
-                <button class="modal-btn cancel" onclick="closeModal('privacyModal')">Close</button>
-            </div>
+            <h2>Privacy Policy</h2><p>We do not store any code. All editing happens locally. Google AdSense may collect cookies.</p>
+            <div class="modal-btn-group"><button class="modal-btn cancel" onclick="closeModal('privacyModal')">Close</button></div>
         </div>
     </div>
-
     <div class="modal-overlay" id="termsModal">
         <div class="modal-box text-left">
-            <h2 style="margin-top:0;">Terms of Service</h2>
-            <p><strong>1. Usage</strong><br>By using QuickSaveHTML, you agree to these terms. This tool is provided "as is" without any warranties.</p>
-            <p><strong>2. Responsibility</strong><br>You are solely responsible for the content (HTML code) you generate. We are not liable for any data loss or damages arising from the use of this tool.</p>
-            <p><strong>3. Changes</strong><br>We reserve the right to modify these terms at any time.</p>
-            <div class="modal-btn-group">
-                <button class="modal-btn cancel" onclick="closeModal('termsModal')">Close</button>
-            </div>
+            <h2>Terms of Service</h2><p>Provided "as is". You are responsible for your code.</p>
+            <div class="modal-btn-group"><button class="modal-btn cancel" onclick="closeModal('termsModal')">Close</button></div>
         </div>
     </div>
-
     <div class="toast" id="toast">Copied!</div>
 
     <script>
@@ -215,8 +182,7 @@
         const editorPane = document.getElementById('editorPane');
         const dragOverlay = document.getElementById('dragOverlay');
         const workspace = document.getElementById('workspace');
-        let isManuallyChanged = false;
-        let isResizing = false;
+        let isManuallyChanged = false; let isResizing = false;
 
         resizer.addEventListener('mousedown', () => { isResizing = true; resizer.classList.add('resizing'); document.body.classList.add('is-resizing'); dragOverlay.style.display = 'block'; });
         document.addEventListener('mousemove', (e) => { if (!isResizing) return; const w = (e.clientX / workspace.offsetWidth) * 100; if (w > 10 && w < 90) editorPane.style.width = w + '%'; });
@@ -231,10 +197,7 @@
 
         codeInput.addEventListener('input', () => {
             const html = codeInput.value;
-            previewFrame.contentDocument.open();
-            previewFrame.contentDocument.write(html);
-            previewFrame.contentDocument.close();
-            
+            previewFrame.contentDocument.open(); previewFrame.contentDocument.write(html); previewFrame.contentDocument.close();
             if (!isManuallyChanged) {
                 const match = html.match(/<title>(.*?)<\/title>/);
                 if (match && match[1]) {
@@ -247,54 +210,21 @@
 
         function startDownloadProcess() {
             if (!codeInput.value.trim()) return showToast("Nothing to download!", true);
-            const modal = document.getElementById('downloadModal');
-            const spinner = document.getElementById('spinner');
-            const msg = document.getElementById('download-msg');
-            
-            modal.style.display = 'flex';
-            spinner.style.display = 'block';
-            msg.style.display = 'none';
-
-            setTimeout(() => {
-                realDownload();
-                spinner.style.display = 'none';
-                msg.style.display = 'block';
-                setTimeout(() => { modal.style.display = 'none'; }, 1500);
-            }, 3000);
+            const modal = document.getElementById('downloadModal'); const spinner = document.getElementById('spinner'); const msg = document.getElementById('download-msg');
+            modal.style.display = 'flex'; spinner.style.display = 'block'; msg.style.display = 'none';
+            setTimeout(() => { realDownload(); spinner.style.display = 'none'; msg.style.display = 'block'; setTimeout(() => { modal.style.display = 'none'; }, 1500); }, 3000);
         }
-
         function realDownload() {
-            const blob = new Blob([codeInput.value], { type: "text/html" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = (filenameInput.value.trim() || "index") + ".html";
-            a.click();
-            URL.revokeObjectURL(url);
+            const blob = new Blob([codeInput.value], { type: "text/html" }); const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url; a.download = (filenameInput.value.trim() || "index") + ".html"; a.click(); URL.revokeObjectURL(url);
         }
-
         function openResetModal() { if (codeInput.value.trim()) document.getElementById('resetModal').style.display = 'flex'; }
         function closeResetModal() { document.getElementById('resetModal').style.display = 'none'; }
-        
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function confirmReset() {
-            codeInput.value = ""; filenameInput.value = "index"; isManuallyChanged = false;
-            previewFrame.contentDocument.open(); previewFrame.contentDocument.close();
-            closeResetModal(); showToast("Cleared!");
-        }
-        function copyCode() {
-            if (!codeInput.value.trim()) return;
-            navigator.clipboard.writeText(codeInput.value);
-            showToast("Copied to clipboard!");
-        }
-        function showToast(msg, isError = false) {
-            const t = document.getElementById('toast');
-            t.innerHTML = (isError ? '<i class="fas fa-exclamation-circle" style="color:#ef4444"></i> ' : '<i class="fas fa-check-circle" style="color:#4ade80"></i> ') + msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2500);
-        }
+        function confirmReset() { codeInput.value = ""; filenameInput.value = "index"; isManuallyChanged = false; previewFrame.contentDocument.open(); previewFrame.contentDocument.close(); closeResetModal(); showToast("Cleared!"); }
+        function copyCode() { if (!codeInput.value.trim()) return; navigator.clipboard.writeText(codeInput.value); showToast("Copied!"); }
+        function showToast(msg, isError = false) { const t = document.getElementById('toast'); t.innerHTML = (isError ? '<i class="fas fa-exclamation-circle" style="color:#ef4444"></i> ' : '<i class="fas fa-check-circle" style="color:#4ade80"></i> ') + msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
     </script>
 </body>
 </html>
