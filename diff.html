@@ -68,10 +68,18 @@
             const oldText = document.getElementById('oldCode').value;
             const newText = document.getElementById('newCode').value;
             const ignoreSpace = document.getElementById('ignoreWhitespace').checked;
-            if(!oldText && !newText) return alert("Please enter text!");
             
-            // 🔥 알맹이만 남겨서 비교하는 똑똑한 로직 추가
-            const diff = Diff.diffLines(oldText, newText, { ignoreWhitespace: ignoreSpace });
+            if(!oldText && !newText) return alert("Please enter text!");
+
+            // 1. 공백 무시 모드일 경우, 아예 줄 단위로 '알맹이'만 추출해서 비교합니다.
+            let diff;
+            if (ignoreSpace) {
+                // 앞뒤 공백을 다 깎은(trim) 버전으로 먼저 비교를 돌립니다.
+                diff = Diff.diffLines(oldText, newText, { ignoreWhitespace: true });
+            } else {
+                diff = Diff.diffLines(oldText, newText);
+            }
+            
             const leftPane = document.getElementById('leftPane');
             const rightPane = document.getElementById('rightPane');
             let leftHTML = '', rightHTML = '', leftCount = 1, rightCount = 1;
@@ -80,8 +88,6 @@
                 const lines = part.value.replace(/\n$/, '').split('\n');
                 lines.forEach((line) => {
                     const safeLine = escapeHtml(line) || '&nbsp;';
-                    // 공백 무시가 체크되어 있고, 알맹이가 아예 똑같으면 색깔을 입히지 않음
-                    let isChange = (part.added || part.removed);
                     
                     if (part.removed) {
                         leftHTML += `<div class="code-row removed-bg"><div class="line-num">${leftCount++}</div><div class="line-content">${safeLine}</div></div>`;
