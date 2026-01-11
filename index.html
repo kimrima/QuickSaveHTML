@@ -8,8 +8,11 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 
+    <link rel="canonical" href="https://quicksavehtml.com">
+    <meta name="robots" content="index, follow">
     <meta name="keywords" content="HTML editor, online html preview, html saver, simple code editor, web development tool">
     <meta name="author" content="QuickSaveHTML">
+    
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://quicksavehtml.com">
     <meta property="og:title" content="QuickSaveHTML - Free Editor & Saver">
@@ -27,7 +30,9 @@
 
         /* Header */
         header { height: 60px; background-color: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); z-index: 10; user-select: none; }
-        .logo { font-weight: 800; font-size: 18px; color: #60a5fa; display: flex; align-items: center; gap: 8px; }
+        
+        /* 🔥 H1 태그로 변경하면서 디자인 유지 (margin:0 중요) */
+        .logo { font-weight: 800; font-size: 18px; color: #60a5fa; display: flex; align-items: center; gap: 8px; margin: 0; }
         .logo span { color: white; }
         .toolbar { display: flex; gap: 8px; align-items: center; }
 
@@ -92,7 +97,8 @@
 </head>
 <body>
     <header>
-        <div class="logo"><i class="fas fa-bolt"></i> QuickSave<span>Html</span></div>
+        <h1 class="logo"><i class="fas fa-bolt"></i> QuickSave<span>Html</span></h1>
+        
         <div class="toolbar">
             <div class="filename-wrapper">
                 <input type="text" id="filename-input" value="index" placeholder="filename">
@@ -201,12 +207,10 @@
         let isManuallyChanged = false;
         let isResizing = false;
 
-        // 1. Resizing
         resizer.addEventListener('mousedown', () => { isResizing = true; resizer.classList.add('resizing'); document.body.classList.add('is-resizing'); dragOverlay.style.display = 'block'; });
         document.addEventListener('mousemove', (e) => { if (!isResizing) return; const w = (e.clientX / workspace.offsetWidth) * 100; if (w > 10 && w < 90) editorPane.style.width = w + '%'; });
         document.addEventListener('mouseup', () => { isResizing = false; resizer.classList.remove('resizing'); document.body.classList.remove('is-resizing'); dragOverlay.style.display = 'none'; });
 
-        // 2. Device View
         function setDevice(type) {
             const wrapper = document.getElementById('iframeWrapper');
             document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
@@ -214,7 +218,6 @@
             type === 'mobile' ? wrapper.classList.add('mobile-mode') : wrapper.classList.remove('mobile-mode');
         }
 
-        // 3. Preview & Auto-name
         codeInput.addEventListener('input', () => {
             const html = codeInput.value;
             previewFrame.contentDocument.open();
@@ -231,7 +234,6 @@
         });
         filenameInput.addEventListener('input', () => { isManuallyChanged = true; if(filenameInput.value.trim() === "") isManuallyChanged = false; });
 
-        // 4. Download
         function startDownloadProcess() {
             if (!codeInput.value.trim()) return showToast("Nothing to download!", true);
             const modal = document.getElementById('downloadModal');
@@ -260,11 +262,9 @@
             URL.revokeObjectURL(url);
         }
 
-        // 5. Modals (Footer & Reset)
         function openResetModal() { if (codeInput.value.trim()) document.getElementById('resetModal').style.display = 'flex'; }
         function closeResetModal() { document.getElementById('resetModal').style.display = 'none'; }
         
-        // 약관 모달 열기/닫기 함수
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
