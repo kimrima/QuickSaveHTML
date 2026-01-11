@@ -64,22 +64,29 @@
     </div>
     <script>
         function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+        
+        // 🔥 줄별 알맹이 정규화 함수 추가
+        function normalizeLine(line) {
+            return line.trim().replace(/\s+/g, ' '); 
+        }
+
         function compareCode() {
-            const oldText = document.getElementById('oldCode').value;
-            const newText = document.getElementById('newCode').value;
+            const oldRaw = document.getElementById('oldCode').value;
+            const newRaw = document.getElementById('newCode').value;
             const ignoreSpace = document.getElementById('ignoreWhitespace').checked;
             
-            if(!oldText && !newText) return alert("Please enter text!");
+            if(!oldRaw && !newRaw) return alert("Please enter text!");
 
-            // 1. 공백 무시 모드일 경우, 아예 줄 단위로 '알맹이'만 추출해서 비교합니다.
-            let diff;
-            if (ignoreSpace) {
-                // 앞뒤 공백을 다 깎은(trim) 버전으로 먼저 비교를 돌립니다.
-                diff = Diff.diffLines(oldText, newText, { ignoreWhitespace: true });
-            } else {
-                diff = Diff.diffLines(oldText, newText);
+            let oldProcessed = oldRaw;
+            let newProcessed = newRaw;
+
+            // 🔥 공백 무시 모드일 때 텍스트 자체를 '청소'해버립니다.
+            if(ignoreSpace) {
+                oldProcessed = oldRaw.split('\n').map(normalizeLine).join('\n');
+                newProcessed = newRaw.split('\n').map(normalizeLine).join('\n');
             }
             
+            const diff = Diff.diffLines(oldProcessed, newProcessed);
             const leftPane = document.getElementById('leftPane');
             const rightPane = document.getElementById('rightPane');
             let leftHTML = '', rightHTML = '', leftCount = 1, rightCount = 1;
