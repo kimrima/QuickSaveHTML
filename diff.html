@@ -51,4 +51,120 @@
         .code-row { display: flex; height: 24px; line-height: 24px; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; white-space: pre; }
         
         /* 줄 번호 */
-        .line-num { width: 40px; min-width:
+        .line-num { width: 40px; min-width: 40px; text-align: right; padding-right: 10px; color: #4b5563; background: #1e1e1e; border-right: 1px solid #333; user-select: none; font-size: 11px; box-sizing: border-box; }
+        
+        /* 코드 내용 */
+        .line-content { flex: 1; padding-left: 10px; color: #d1d5db; overflow: hidden; }
+
+        /* 색상 하이라이트 */
+        .removed-bg { background-color: rgba(220, 38, 38, 0.2); } /* 빨간색 배경 (삭제) */
+        .added-bg { background-color: rgba(5, 150, 105, 0.2); }   /* 초록색 배경 (추가) */
+        .empty-bg { background-color: #161b22; }                  /* 빈 공간 (짝 맞추기용) */
+
+        button.action-btn { background: var(--primary); color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        button.close-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link"><i class="fas fa-code"></i> Editor</a>
+        <a href="diff.html" class="nav-link active"><i class="fas fa-exchange-alt"></i> Diff Checker</a>
+    </div>
+
+    <header>
+        <h1>AI Code Diff <span class="tag">BETA</span></h1>
+        <button class="action-btn" onclick="compareCode()">Compare Side-by-Side <i class="fas fa-columns"></i></button>
+    </header>
+
+    <div class="workspace">
+        <div class="input-col">
+            <div class="pane-title">1. Original Code (삭제된 부분은 빨간색🟥)</div>
+            <textarea id="oldCode" placeholder="여기에 원본 코드를 붙여넣으세요..."></textarea>
+        </div>
+        <div class="input-col" style="border-right:none;">
+            <div class="pane-title">2. New AI Code (추가된 부분은 초록색🟩)</div>
+            <textarea id="newCode" placeholder="여기에 AI가 고쳐준 코드를 붙여넣으세요..."></textarea>
+        </div>
+    </div>
+
+    <div class="output-overlay" id="resultView">
+        <div class="output-header">
+            <span style="font-weight:bold; color:white;"><i class="fas fa-columns"></i> Split Comparison View</span>
+            <button class="close-btn" onclick="closeResult()">Close X</button>
+        </div>
+        
+        <div class="diff-split-container">
+            <div class="diff-pane left" id="leftPane"></div>
+            <div class="diff-pane right" id="rightPane"></div>
+        </div>
+    </div>
+
+    <script>
+        // HTML 태그가 그대로 나오지 않게 안전하게 변환하는 함수
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function compareCode() {
+            const oldText = document.getElementById('oldCode').value;
+            const newText = document.getElementById('newCode').value;
+            
+            if(!oldText && !newText) return alert("비교할 코드를 입력해주세요!");
+
+            const diff = Diff.diffLines(oldText, newText);
+            
+            const leftPane = document.getElementById('leftPane');
+            const rightPane = document.getElementById('rightPane');
+            
+            let leftHTML = '';
+            let rightHTML = '';
+            
+            let leftCount = 1;
+            let rightCount = 1;
+
+            diff.forEach((part) => {
+                // 줄바꿈 문자 제거하고 한 줄씩 배열로 만듦
+                const lines = part.value.replace(/\n$/, '').split('\n');
+                const colorClass = part.added ? 'added-bg' : part.removed ? 'removed-bg' : '';
+
+                lines.forEach((line) => {
+                    const safeLine = escapeHtml(line) || '&nbsp;'; // 빈 줄 처리
+
+                    if (part.removed) {
+                        // 삭제된 경우: 왼쪽에만 빨간색으로 표시, 오른쪽은 빈칸
+                        leftHTML += createRow(leftCount++, safeLine, 'removed-bg');
+                        rightHTML += createRow('', '', 'empty-bg'); // 오른쪽은 텅 빈 박스
+                    } 
+                    else if (part.added) {
+                        // 추가된 경우: 왼쪽은 빈칸, 오른쪽에만 초록색으로 표시
+                        leftHTML += createRow('', '', 'empty-bg'); // 왼쪽은 텅 빈 박스
+                        rightHTML += createRow(rightCount++, safeLine, 'added-bg');
+                    } 
+                    else {
+                        // 변경 없음: 양쪽에 똑같이 표시
+                        leftHTML += createRow(leftCount++, safeLine, '');
+                        rightHTML += createRow(rightCount++, safeLine, '');
+                    }
+                });
+            });
+
+            leftPane.innerHTML = leftHTML;
+            rightPane.innerHTML = rightHTML;
+            
+            document.getElementById('resultView').style.display = 'flex';
+        }
+
+        // HTML 조각 만드는 헬퍼 함수
+        function createRow(num, content, bgClass) {
+            return `<div class="code-row ${bgClass}">
+                        <div class="line-num">${num}</div>
+                        <div class="line-content">${content}</div>
+                    </div>`;
+        }
+
+        function closeResult() {
+            document.getElementById('resultView').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
