@@ -3,5 +3,11 @@
   <url>
     <loc>https://quicksavehtml.com/</loc>
     <lastmod>2026-01-11</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://quicksavehtml.com/diff.html</loc>
+    <lastmod>2026-01-11</lastmod>
+    <priority>0.8</priority>
   </url>
 </urlset>
