@@ -17,29 +17,48 @@
     <style>
         :root { --primary: #2563eb; --bg-dark: #111827; --bg-panel: #1f2937; --text-main: #f3f4f6; --text-sub: #9ca3af; --border: #374151; }
         body { margin: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
-        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; }
+        
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; min-height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; flex-wrap: wrap; }
         .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; }
         .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
-        header { height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
+        
+        header { min-height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
         h1 { margin: 0; font-size: 16px; color: #fff; }
-        .controls { display: flex; align-items: center; gap: 15px; }
+        .controls { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .checkbox-label { font-size: 12px; color: var(--text-sub); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        
         .workspace { display: flex; flex: 1; height: calc(100vh - 90px); }
         .input-col { width: 50%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
         .pane-title { background: var(--bg-panel); padding: 8px 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); border-bottom: 1px solid var(--border); }
         textarea { flex: 1; background: var(--bg-dark); color: #e5e7eb; border: none; padding: 15px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
+        
         .output-overlay { position: fixed; top: 90px; left: 0; width: 100%; height: calc(100% - 90px); background: var(--bg-dark); z-index: 50; display: none; flex-direction: column; }
         .output-header { padding: 10px 20px; background: #0f172a; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .diff-split-container { display: flex; flex: 1; overflow: auto; background: #111; }
         .diff-pane { width: 50%; display: flex; flex-direction: column; border-right: 1px solid #333; }
+        
         .code-row { display: flex; min-height: 24px; line-height: 24px; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; }
-        .line-num { width: 40px; min-width: 40px; text-align: right; padding-right: 10px; color: #4b5563; background: #1e1e1e; border-right: 1px solid #333; font-size: 11px; }
+        .line-num { width: 35px; min-width: 35px; text-align: right; padding-right: 5px; color: #4b5563; background: #1e1e1e; border-right: 1px solid #333; font-size: 10px; }
         .line-content { flex: 1; padding-left: 10px; color: #d1d5db; }
         .removed-bg { background-color: rgba(220, 38, 38, 0.25); } 
         .added-bg { background-color: rgba(5, 150, 105, 0.25); }   
         .empty-bg { background-color: #0d1117; }                  
         button.action-btn { background: var(--primary); color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
         button.close-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+
+        /* 📱 모바일 반응형 디자인 */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; height: auto; }
+            .workspace { flex-direction: column; height: auto; }
+            .input-col { width: 100%; height: 350px; border-right: none; border-bottom: 2px solid var(--border); }
+            
+            .output-overlay { top: 0; height: 100%; } /* 결과 화면을 전체 화면으로 */
+            .diff-split-container { flex-direction: column; }
+            .diff-pane { width: 100%; border-right: none; border-bottom: 1px solid #333; height: auto; }
+            
+            header { padding: 10px; }
+            .controls { width: 100%; justify-content: space-between; }
+        }
     </style>
 </head>
 <body>
@@ -48,54 +67,38 @@
         <a href="diff.html" class="nav-link active"><i class="fas fa-exchange-alt"></i> Diff Checker</a>
     </div>
     <header>
-        <h1>Smart Diff Checker <span style="background:var(--primary); font-size:10px; padding:2px 6px; border-radius:4px; margin-left:8px;">BETA</span></h1>
+        <h1>Smart Diff <span style="background:var(--primary); font-size:10px; padding:2px 6px; border-radius:4px; margin-left:4px;">BETA</span></h1>
         <div class="controls">
-            <label class="checkbox-label"><input type="checkbox" id="ignoreWhitespace" checked> Ignore Whitespace</label>
+            <label class="checkbox-label"><input type="checkbox" id="ignoreWhitespace" checked> Ignore Space</label>
             <button class="action-btn" onclick="compareCode()">Compare <i class="fas fa-arrow-right"></i></button>
         </div>
     </header>
     <div class="workspace">
-        <div class="input-col"><div class="pane-title">1. Original Version</div><textarea id="oldCode" placeholder="Paste original text..."></textarea></div>
-        <div class="input-col" style="border-right:none;"><div class="pane-title">2. Modified Version</div><textarea id="newCode" placeholder="Paste modified text..."></textarea></div>
+        <div class="input-col"><div class="pane-title">1. Original</div><textarea id="oldCode" placeholder="Paste original text..."></textarea></div>
+        <div class="input-col" style="border-right:none;"><div class="pane-title">2. Modified</div><textarea id="newCode" placeholder="Paste modified text..."></textarea></div>
     </div>
     <div class="output-overlay" id="resultView">
-        <div class="output-header"><span style="font-weight:bold; color:white;"><i class="fas fa-columns"></i> Comparison Result</span><button class="close-btn" onclick="closeResult()">Close X</button></div>
+        <div class="output-header"><span style="font-weight:bold; color:white; font-size: 14px;"><i class="fas fa-columns"></i> Result</span><button class="close-btn" onclick="closeResult()">Close X</button></div>
         <div class="diff-split-container"><div class="diff-pane" id="leftPane"></div><div class="diff-pane" id="rightPane" style="border-right:none;"></div></div>
     </div>
     <script>
         function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
-        
-        // 🔥 줄별 알맹이 정규화 함수 추가
-        function normalizeLine(line) {
-            return line.trim().replace(/\s+/g, ' '); 
-        }
-
+        function normalizeLine(line) { return line.trim().replace(/\s+/g, ' '); }
         function compareCode() {
             const oldRaw = document.getElementById('oldCode').value;
             const newRaw = document.getElementById('newCode').value;
             const ignoreSpace = document.getElementById('ignoreWhitespace').checked;
-            
             if(!oldRaw && !newRaw) return alert("Please enter text!");
-
-            let oldProcessed = oldRaw;
-            let newProcessed = newRaw;
-
-            // 🔥 공백 무시 모드일 때 텍스트 자체를 '청소'해버립니다.
-            if(ignoreSpace) {
-                oldProcessed = oldRaw.split('\n').map(normalizeLine).join('\n');
-                newProcessed = newRaw.split('\n').map(normalizeLine).join('\n');
-            }
-            
+            let oldProcessed = ignoreSpace ? oldRaw.split('\n').map(normalizeLine).join('\n') : oldRaw;
+            let newProcessed = ignoreSpace ? newRaw.split('\n').map(normalizeLine).join('\n') : newRaw;
             const diff = Diff.diffLines(oldProcessed, newProcessed);
             const leftPane = document.getElementById('leftPane');
             const rightPane = document.getElementById('rightPane');
             let leftHTML = '', rightHTML = '', leftCount = 1, rightCount = 1;
-
             diff.forEach((part) => {
                 const lines = part.value.replace(/\n$/, '').split('\n');
                 lines.forEach((line) => {
                     const safeLine = escapeHtml(line) || '&nbsp;';
-                    
                     if (part.removed) {
                         leftHTML += `<div class="code-row removed-bg"><div class="line-num">${leftCount++}</div><div class="line-content">${safeLine}</div></div>`;
                         rightHTML += `<div class="code-row empty-bg"><div class="line-num"></div><div class="line-content"></div></div>`;
