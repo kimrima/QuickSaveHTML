@@ -157,6 +157,9 @@
             <div class="pane-header preview-header">
                 <span><i class="fas fa-desktop"></i> Preview</span>
                 <div style="display: flex; gap: 5px;">
+                    <button onclick="refreshPreview()" title="Refresh Preview" style="padding: 6px 10px; border: 1px solid #d1d5db;">
+            <i class="fas fa-sync-alt"></i>
+        </button>
                     <button class="device-btn active" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
                     <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
                 </div>
@@ -255,6 +258,15 @@
         function confirmReset() { codeInput.value = ""; filenameInput.value = "index"; isManuallyChanged = false; previewFrame.contentDocument.open(); previewFrame.contentDocument.close(); closeResetModal(); showToast("Cleared!"); }
         function copyCode() { if (!codeInput.value.trim()) return; navigator.clipboard.writeText(codeInput.value); showToast("Copied!"); }
         function showToast(msg, isError = false) { const t = document.getElementById('toast'); t.innerHTML = (isError ? '<i class="fas fa-exclamation-circle" style="color:#ef4444"></i> ' : '<i class="fas fa-check-circle" style="color:#4ade80"></i> ') + msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+
+        // 404 에러 등을 만났을 때 에디터의 코드를 다시 미리보기에 밀어넣는 함수입니다.
+function refreshPreview() {
+    const html = codeInput.value;
+    previewFrame.contentDocument.open();
+    previewFrame.contentDocument.write(html);
+    previewFrame.contentDocument.close();
+    showToast("Preview Refreshed!");
+}
     </script>
 </body>
 </html>
