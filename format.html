@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVHGGEGNY7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VVHGGEGNY7');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Formatter & Minifier - QuickSaveHTML</title>
+    <meta name="description" content="Free online HTML Formatter and Minifier. Beautify your ugly code or minify it for production.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #2563eb; --bg-dark: #111827; --bg-panel: #1f2937; --text-main: #f3f4f6; --text-sub: #9ca3af; --border: #374151; }
+        body { margin: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
+        
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; }
+        .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+        .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
+
+        header { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
+        h1 { margin: 0; font-size: 18px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        
+        .action-group { display: flex; gap: 10px; }
+        button.action-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        button.action-btn:hover { background: #1d4ed8; }
+        button.secondary-btn { background: #374151; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        button.secondary-btn:hover { background: #4b5563; }
+
+        .workspace { display: flex; flex: 1; height: calc(100vh - 100px); }
+        .editor-container { width: 50%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+        .pane-header { background: #111827; padding: 8px 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        textarea { flex: 1; background: #0d1117; color: #e5e7eb; border: none; padding: 15px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
+
+        @media (max-width: 768px) {
+            .workspace { flex-direction: column; }
+            .editor-container { width: 100%; height: 50%; border-right: none; border-bottom: 1px solid var(--border); }
+            header { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
+            .action-group { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link"><i class="fas fa-code"></i> Editor</a>
+        <a href="diff.html" class="nav-link"><i class="fas fa-exchange-alt"></i> Diff Checker</a>
+        <a href="format.html" class="nav-link active"><i class="fas fa-broom"></i> Formatter</a>
+    </div>
+
+    <header>
+        <h1><i class="fas fa-magic" style="color:#60a5fa;"></i> HTML Code Formatter</h1>
+        <div class="action-group">
+            <button class="action-btn" onclick="formatCode()"><i class="fas fa-align-left"></i> Beautify (정렬)</button>
+            <button class="secondary-btn" onclick="minifyCode()"><i class="fas fa-compress-arrows-alt"></i> Minify (압축)</button>
+            <button class="secondary-btn" onclick="copyResult()"><i class="far fa-copy"></i> Copy</button>
+        </div>
+    </header>
+
+    <div class="workspace">
+        <div class="editor-container">
+            <div class="pane-header">Input (Paste dirty code here) <button onclick="clearAll()" style="background:none; border:none; color:#ef4444; cursor:pointer;">Clear</button></div>
+            <textarea id="inputCode" placeholder="Paste your messy HTML/CSS/JS code here..."></textarea>
+        </div>
+        <div class="editor-container" style="border-right:none;">
+            <div class="pane-header">Output (Clean code result)</div>
+            <textarea id="outputCode" readonly placeholder="Result will appear here..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        function formatCode() {
+            const input = document.getElementById('inputCode').value;
+            if(!input) return alert("Please paste some code first!");
+            
+            // html_beautify 라이브러리 사용
+            const formatted = html_beautify(input, {
+                "indent_size": 4,
+                "indent_char": " ",
+                "max_preserve_newlines": 1,
+                "preserve_newlines": true,
+                "keep_array_indentation": false,
+                "break_chained_methods": false,
+                "indent_scripts": "normal",
+                "brace_style": "collapse",
+                "space_before_conditional": true,
+                "unescape_strings": false,
+                "jslint_happy": false,
+                "end_with_newline": false,
+                "wrap_line_length": 0,
+                "indent_inner_html": false,
+                "comma_first": false,
+                "e4x": false,
+                "indent_empty_lines": false
+            });
+            
+            document.getElementById('outputCode').value = formatted;
+        }
+
+        function minifyCode() {
+            const input = document.getElementById('inputCode').value;
+            if(!input) return alert("Please paste some code first!");
+
+            // 단순 무식하게 줄바꿈과 공백을 제거하는 Minify 로직
+            const minified = input.replace(/\n/g, "").replace(/[\t ]+\</g, "<").replace(/\>[\t ]+\</g, "><").replace(/\>[\t ]+$/g, ">");
+            document.getElementById('outputCode').value = minified;
+        }
+
+        function copyResult() {
+            const output = document.getElementById('outputCode');
+            if(!output.value) return;
+            output.select();
+            document.execCommand('copy');
+            alert("Code copied to clipboard!");
+        }
+
+        function clearAll() {
+            document.getElementById('inputCode').value = '';
+            document.getElementById('outputCode').value = '';
+        }
+    </script>
+</body>
+</html>
