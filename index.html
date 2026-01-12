@@ -272,6 +272,32 @@ function refreshPreview() {
     previewFrame.contentDocument.close();
     showToast("Preview Refreshed!");
 }
+    // 📂 파일 읽어오기 함수
+function loadFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const content = e.target.result;
+        
+        // 1. 에디터에 내용 채우기
+        codeInput.value = content;
+        
+        // 2. 미리보기 화면 갱신하기
+        previewFrame.contentDocument.open();
+        previewFrame.contentDocument.write(content);
+        previewFrame.contentDocument.close();
+        
+        // 3. 파일 이름 자동으로 입력해주기 (확장자 떼고)
+        const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+        filenameInput.value = nameWithoutExt;
+        
+        showToast("File Loaded!");
+    };
+    reader.readAsText(file);
+}
+
     </script>
 </body>
 </html>
