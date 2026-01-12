@@ -145,6 +145,12 @@
 <button onclick="document.getElementById('file-selector').click()" title="Open File" style="margin-left: 5px;">
     <i class="fas fa-folder-open"></i>
 </button>
+<button onclick="insertTemplate()" title="Insert Basic Template">
+    <i class="fas fa-magic"></i>
+</button>
+<button onclick="insertLorem()" title="Insert Dummy Text">
+    <i class="fas fa-paragraph"></i>
+</button>
 
             <button class="danger" onclick="openResetModal()" title="Reset"><i class="fas fa-trash-alt"></i></button>
             <button onclick="copyCode()" title="Copy"><i class="far fa-copy"></i></button>
@@ -296,6 +302,54 @@ function loadFile(event) {
         showToast("File Loaded!");
     };
     reader.readAsText(file);
+}
+// 1. 기본 HTML 뼈대 넣어주는 함수
+function insertTemplate() {
+    if(codeInput.value.trim() !== "" && !confirm("Overwrite current code?")) return;
+    
+    const template = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; text-align: center; }
+        h1 { color: #2563eb; }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>This is my first page.</p>
+    <button onclick="alert('Clicked!')">Click Me</button>
+</body>
+</html>`;
+    
+    codeInput.value = template;
+    previewFrame.contentDocument.open();
+    previewFrame.contentDocument.write(template);
+    previewFrame.contentDocument.close();
+}
+
+// 2. 더미 텍스트(Lorem Ipsum) 넣어주는 함수 (커서 위치에 삽입)
+function insertLorem() {
+    const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+    
+    // 현재 커서 위치에 글자 끼워넣기 (조금 고급 기술!)
+    const start = codeInput.selectionStart;
+    const end = codeInput.selectionEnd;
+    const text = codeInput.value;
+    
+    codeInput.value = text.substring(0, start) + lorem + text.substring(end);
+    
+    // 커서 위치 다시 잡아주기
+    codeInput.selectionStart = codeInput.selectionEnd = start + lorem.length;
+    
+    // 미리보기 갱신
+    previewFrame.contentDocument.open();
+    previewFrame.contentDocument.write(codeInput.value);
+    previewFrame.contentDocument.close();
 }
 
     </script>
