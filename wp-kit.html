@@ -6,15 +6,15 @@
     <title>WP Ultimate Kit - QuickSaveHTML</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [1] Global Styles - Matching Main Editor Theme */
+        /* [1] Global Styles */
         :root {
-            --bg-color: #0d1117;       /* Main Background (Deep Dark) */
-            --sidebar-bg: #161b22;     /* Sidebar Background */
-            --border-color: #30363d;   /* Border Line */
-            --text-main: #c9d1d9;      /* Main Text */
-            --text-sub: #8b949e;       /* Sub Text */
-            --accent: #58a6ff;         /* Blue Accent */
-            --input-bg: #0d1117;       /* Input Field Background */
+            --bg-color: #0d1117;
+            --sidebar-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-sub: #8b949e;
+            --accent: #58a6ff;
+            --input-bg: #0d1117;
         }
         body {
             margin: 0;
@@ -27,7 +27,7 @@
             overflow: hidden;
         }
 
-        /* [2] Navigation Bar */
+        /* [2] Navigation Bar (Height Adjusted to 40px) */
         .nav-bar {
             height: 40px;
             background-color: #161b22;
@@ -52,7 +52,7 @@
         .nav-link:hover { color: var(--text-main); }
         .nav-link.active {
             color: var(--text-main);
-            border-bottom-color: #fd8c73; /* Active Color matching Formatter */
+            border-bottom-color: #fd8c73;
         }
 
         /* [3] Workspace Layout */
@@ -60,7 +60,7 @@
             display: flex;
             flex: 1;
             overflow: hidden;
-            height: calc(100vh - 40px - 40px);
+            height: calc(100vh - 40px - 40px); /* Top 40px + Footer 40px */
         }
 
         /* Left Sidebar */
@@ -145,7 +145,7 @@
         .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
         
         .preview-box {
-            background: white; /* Always white for accurate preview */
+            background: white;
             color: #333;
             padding: 30px;
             border-radius: 6px;
@@ -252,9 +252,7 @@
     </footer>
 
     <script>
-        /* * 22 Essential WordPress Tools List
-         * Categories: Monetization, Design, Structure, Social/Media
-         */
+        /* 25 Essential WordPress Tools List */
         const tools = [
             // --- 1. Monetization ---
             {
@@ -325,7 +323,8 @@
                 inputs: [
                     { id: 'style', label: 'Style', type: 'select', options: {'dashed':'Dashed (- - -)', 'dotted':'Dotted (· · ·)', 'double':'Double Line (=)', 'solid':'Solid Line (—)'} }
                 ],
-               template: (d) => `<hr style="width:100%; border:0; border-top:3px ${d.style} #ccc; margin:40px 0;">`
+                template: (d) => `<hr style="width:100%; border:0; border-top:3px ${d.style} #ccc; margin:40px 0;">`
+            },
             {
                 id: 'blockquote', category: '🎨 Design & UI', name: 'Modern Blockquote',
                 inputs: [
@@ -335,7 +334,7 @@
                 template: (d) => `<blockquote style="border-left:5px solid #333; margin:20px 0; padding-left:20px; font-style:italic; font-size:18px; color:#555;">"${d.quote}"<footer style="margin-top:10px; font-size:14px; font-weight:bold; color:#333;">— ${d.author}</footer></blockquote>`
             },
             {
-                id: 'dropcap', category: '🎨 Design & UI', name: 'Drop Cap (First Letter)',
+                id: 'dropcap', category: '🎨 Design & UI', name: 'Drop Cap',
                 inputs: [
                     { id: 'letter', label: 'First Letter', type: 'text', val: 'L' },
                     { id: 'text', label: 'Remaining Text', type: 'textarea', val: 'orem ipsum dolor sit amet, consectetur adipiscing elit.' }
@@ -361,7 +360,7 @@
                 template: (d) => `<details style="margin:10px 0; border:1px solid #e5e7eb; border-radius:8px; padding:12px; background:white;"><summary style="font-weight:bold; cursor:pointer; font-size:16px; color:#1f2937;">❓ ${d.q}</summary><div style="padding:15px 5px 5px 5px; color:#4b5563; border-top:1px solid #f3f4f6; margin-top:10px; line-height:1.6;">${d.a}</div></details>`
             },
             {
-                id: 'toc', category: '🧱 Structure', name: 'Table of Contents (Static)',
+                id: 'toc', category: '🧱 Structure', name: 'Table of Contents',
                 inputs: [
                     { id: 'l1', label: 'Link 1 Name', type: 'text', val: 'Introduction' },
                     { id: 'l2', label: 'Link 2 Name', type: 'text', val: 'Main Features' },
@@ -380,7 +379,7 @@
                 }
             },
             {
-                id: 'grid-2col', category: '🧱 Structure', name: '2-Column Grid (Text)',
+                id: 'grid-2col', category: '🧱 Structure', name: '2-Column Grid',
                 inputs: [
                     { id: 'left', label: 'Left Column', type: 'textarea', val: 'Left side content here.' },
                     { id: 'right', label: 'Right Column', type: 'textarea', val: 'Right side content here.' }
@@ -397,6 +396,16 @@
                 template: (d) => `<div style="display:flex; align-items:start; gap:15px; margin:20px 0;"><div style="background:#2563eb; color:white; font-weight:bold; width:40px; height:40px; border-radius:50%; display:flex; justify-content:center; align-items:center; flex-shrink:0;">${d.num}</div><div><h4 style="margin:0 0 5px 0; font-size:18px;">${d.title}</h4><p style="margin:0; color:#666;">${d.desc}</p></div></div>`
             },
             {
+                id: 'timeline', category: '🧱 Structure', name: 'Vertical Timeline',
+                inputs: [
+                    { id: 'year1', label: 'Year / Time 1', type: 'text', val: '2023' },
+                    { id: 'event1', label: 'Event 1', type: 'text', val: 'Project Started' },
+                    { id: 'year2', label: 'Year / Time 2', type: 'text', val: '2024' },
+                    { id: 'event2', label: 'Event 2', type: 'text', val: 'Launch MVP' }
+                ],
+                template: (d) => `<div style="border-left:2px solid #ddd; padding-left:20px; margin-left:10px;"><div style="margin-bottom:20px; position:relative;"><div style="position:absolute; left:-26px; top:0; width:12px; height:12px; background:#2563eb; border-radius:50%;"></div><div style="font-weight:bold; color:#2563eb;">${d.year1}</div><div>${d.event1}</div></div><div style="margin-bottom:20px; position:relative;"><div style="position:absolute; left:-26px; top:0; width:12px; height:12px; background:#2563eb; border-radius:50%;"></div><div style="font-weight:bold; color:#2563eb;">${d.year2}</div><div>${d.event2}</div></div></div>`
+            },
+            {
                 id: 'responsive-table', category: '🧱 Structure', name: 'Responsive Table',
                 inputs: [
                     { id: 'h1', label: 'Header 1', type: 'text', val: 'Product' },
@@ -411,7 +420,7 @@
                 id: 'review-box', category: '📢 Social & Media', name: 'Review / Testimonial',
                 inputs: [
                     { id: 'name', label: 'Reviewer Name', type: 'text', val: 'Jane Doe' },
-                    { id: 'stars', label: 'Stars (⭐⭐⭐⭐⭐)', type: 'text', val: '⭐⭐⭐⭐⭐' },
+                    { id: 'stars', label: 'Stars', type: 'text', val: '⭐⭐⭐⭐⭐' },
                     { id: 'text', label: 'Review Text', type: 'textarea', val: 'This product changed my life! Highly recommended.' }
                 ],
                 template: (d) => `<div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; text-align:center;"><div style="font-size:20px; margin-bottom:10px;">${d.stars}</div><p style="font-style:italic; color:#555; margin-bottom:15px;">"${d.text}"</p><div style="font-weight:bold; color:#333;">- ${d.name}</div></div>`
@@ -425,11 +434,26 @@
                 template: (d) => `<div style="display:flex; gap:15px; background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; align-items:center;"><div style="width:60px; height:60px; background:#ddd; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:24px;">👤</div><div><h4 style="margin:0 0 5px 0;">${d.name}</h4><p style="margin:0; font-size:14px; color:#666;">${d.bio}</p></div></div>`
             },
             {
+                id: 'click-to-tweet', category: '📢 Social & Media', name: 'Click to Tweet',
+                inputs: [
+                    { id: 'quote', label: 'Tweet Content', type: 'text', val: 'This is an amazing insight!' },
+                    { id: 'link', label: 'Share Link', type: 'text', val: 'https://twitter.com/intent/tweet?text=This%20is%20amazing!' }
+                ],
+                template: (d) => `<div style="border:2px solid #1da1f2; padding:20px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:20px;"><div style="font-size:18px; font-weight:bold;">"${d.quote}"</div><a href="${d.link}" target="_blank" style="background:#1da1f2; color:white; padding:10px 20px; border-radius:50px; text-decoration:none; font-weight:bold; white-space:nowrap;">Tweet This 🐦</a></div>`
+            },
+            {
                 id: 'youtube', category: '📢 Social & Media', name: 'Responsive YouTube',
                 inputs: [
                     { id: 'url', label: 'Embed URL (src from share code)', type: 'text', placeholder: 'https://www.youtube.com/embed/VIDEO_ID' }
                 ],
-               template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:100%; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
+                template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:100%; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
+            },
+            {
+                id: 'gmaps', category: '📢 Social & Media', name: 'Google Maps Embed',
+                inputs: [
+                    { id: 'url', label: 'Embed Map Link (src)', type: 'text', placeholder: 'https://www.google.com/maps/embed?...' }
+                ],
+                template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
             },
             {
                 id: 'progress', category: '📢 Social & Media', name: 'Progress Bar',
@@ -455,10 +479,13 @@
             }
         ];
 
-        /* --- System Logic (No changes needed here) --- */
+        /* --- System Logic (Fixed & Verified) --- */
         let currentTool = null;
         function init() {
             const menu = document.getElementById('sidebarMenu');
+            // Clean up old elements just in case
+            menu.innerHTML = '';
+            
             let lastCategory = '';
             tools.forEach(tool => {
                 if (tool.category !== lastCategory) {
@@ -480,15 +507,18 @@
             currentTool = tools.find(t => t.id === id);
             document.querySelectorAll('.tool-btn').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
+            
             document.getElementById('toolTitle').textContent = currentTool.name;
             const formBox = document.getElementById('inputForm');
             formBox.innerHTML = '';
+            
             currentTool.inputs.forEach(inp => {
                 const group = document.createElement('div');
                 group.className = 'input-group';
                 const label = document.createElement('label');
                 label.textContent = inp.label;
                 group.appendChild(label);
+                
                 let inputEl;
                 if (inp.type === 'textarea') {
                     inputEl = document.createElement('textarea');
@@ -504,6 +534,7 @@
                     inputEl = document.createElement('input');
                     inputEl.type = inp.type;
                 }
+                
                 if (inp.val) inputEl.value = inp.val;
                 if (inp.placeholder) inputEl.placeholder = inp.placeholder;
                 inputEl.id = `inp-${inp.id}`;
