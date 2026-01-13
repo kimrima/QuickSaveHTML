@@ -6,7 +6,7 @@
     <title>WP Ultimate Kit - QuickSaveHTML</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [1] Design Variables (Matched with Index.html) */
+        /* [1] 디자인 변수 (메인 사이트와 통일) */
         :root {
             --primary: #2563eb;
             --bg-dark: #111827;
@@ -16,27 +16,85 @@
             --border: #374151;
         }
         
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: var(--bg-dark); 
+            color: var(--text-main); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            overflow: hidden; /* PC에서는 스크롤 방지 (앱처럼) */
+        }
 
-        /* [2] Navigation */
-        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
-        .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; }
+        /* [2] 네비게이션 바 (모바일 대응 추가) */
+        .nav-bar { 
+            background: #0f172a; 
+            border-bottom: 1px solid var(--border); 
+            padding: 0 20px; 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            flex-shrink: 0; 
+        }
+        .nav-link { 
+            text-decoration: none; 
+            color: var(--text-sub); 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            transition: 0.2s; 
+            white-space: nowrap; /* 글자 줄바꿈 방지 */
+        }
         .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
         .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
 
-        /* [3] Layout */
-        .workspace { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 40px - 40px); }
-        .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+        /* [3] 레이아웃 구조 */
+        .workspace { 
+            display: flex; 
+            flex: 1; 
+            overflow: hidden; 
+            height: calc(100vh - 40px - 40px); /* 상단바 40px + 푸터 40px 제외 */
+        }
+
+        /* 왼쪽 사이드바 (도구 목록) */
+        .sidebar { 
+            width: 260px; 
+            background: var(--bg-panel); 
+            border-right: 1px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
+            flex-shrink: 0;
+        }
         .sidebar-header { padding: 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
         .category-label { padding: 15px 20px 5px; font-size: 11px; font-weight: bold; color: #60a5fa; text-transform: uppercase; }
         .tool-btn { padding: 8px 20px; cursor: pointer; font-size: 13px; color: var(--text-main); border-left: 3px solid transparent; transition: 0.2s; }
         .tool-btn:hover { background: rgba(255,255,255,0.05); color: white; }
         .tool-btn.active { background: rgba(37, 99, 235, 0.1); border-left-color: var(--primary); color: white; font-weight: 600; }
 
-        .main-panel { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        /* 오른쪽 메인 패널 */
+        .main-panel { 
+            flex: 1; 
+            padding: 30px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 25px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            width: 100%; 
+        }
+
         .config-box { background: var(--bg-panel); padding: 20px; border-radius: 6px; border: 1px solid var(--border); }
         .config-title { margin: 0 0 20px 0; color: white; font-size: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 
+        /* 입력 폼 스타일 */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; color: var(--text-sub); margin-bottom: 6px; font-size: 12px; }
         .input-group input, .input-group textarea, .input-group select { width: 100%; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
@@ -50,7 +108,45 @@
         .copy-btn:hover { background: #15803d; }
         .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
 
-        @media (max-width: 768px) { .workspace { flex-direction: column; height: auto; padding-bottom: 80px; } .sidebar { width: 100%; max-height: 250px; } .nav-link { margin-right: 15px; } }
+        /* [4] 모바일 최적화 (여기가 핵심!) */
+        @media (max-width: 768px) { 
+            body { 
+                height: auto; 
+                overflow-y: auto; /* 모바일은 전체 스크롤 허용 */
+            }
+            .nav-bar {
+                height: auto;       /* 높이 자동 조절 */
+                flex-wrap: wrap;    /* 줄바꿈 허용 */
+                padding: 10px;
+                gap: 10px;
+                justify-content: center; /* 가운데 정렬 */
+            }
+            .nav-link {
+                background: #1f2937; /* 버튼처럼 보이게 배경 추가 */
+                padding: 8px 12px;
+                margin: 0;
+                font-size: 12px;
+                flex: 1 1 auto; /* 너비 자동 조절 */
+                justify-content: center;
+            }
+            .workspace { 
+                flex-direction: column; 
+                height: auto; 
+                overflow: visible;
+                padding-bottom: 80px; /* 푸터 공간 확보 */
+            } 
+            .sidebar { 
+                width: 100%; 
+                max-height: 200px; /* 도구 목록 너무 길지 않게 제한 */
+                border-right: none;
+                border-bottom: 2px solid var(--border);
+            } 
+            .main-panel {
+                padding: 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
     </style>
 </head>
 <body>
@@ -69,12 +165,13 @@
         </div>
 
         <div class="main-panel">
+            
             <div style="background: var(--bg-panel); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                 <h4 style="margin: 0 0 10px 0; color: #60a5fa; font-size: 14px;">🚀 How to use in WordPress</h4>
                 <ol style="margin: 0; padding-left: 20px; color: var(--text-sub); font-size: 13px; line-height: 1.6;">
-                    <li>Select a tool and customize settings. </li>
-                    <li>Click <strong>Copy Code</strong>. </li>
-                    <li>Paste into WordPress <strong>"Custom HTML"</strong> block. </li>
+                    <li>Select a tool and customize settings.</li>
+                    <li>Click <strong>Copy Code</strong>.</li>
+                    <li>Paste into WordPress <strong>"Custom HTML"</strong> block.</li>
                 </ol>
             </div>
 
