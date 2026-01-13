@@ -6,193 +6,32 @@
     <title>WP Ultimate Kit - QuickSaveHTML</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [1] Global Styles */
-        :root {
-            --bg-color: #0d1117;
-            --sidebar-bg: #161b22;
-            --border-color: #30363d;
-            --text-main: #c9d1d9;
-            --text-sub: #8b949e;
-            --accent: #58a6ff;
-            --input-bg: #0d1117;
-        }
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* [2] Navigation Bar (Height Adjusted to 40px) */
-        .nav-bar {
-            height: 40px;
-            background-color: #161b22;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }
-        .nav-link {
-            color: var(--text-sub);
-            text-decoration: none;
-            margin-right: 25px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: 100%;
-            border-bottom: 2px solid transparent;
-            transition: 0.2s;
-        }
+        :root { --bg-color: #0d1117; --sidebar-bg: #161b22; --border-color: #30363d; --text-main: #c9d1d9; --text-sub: #8b949e; --accent: #58a6ff; --input-bg: #0d1117; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .nav-bar { height: 40px; background-color: #161b22; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+        .nav-link { color: var(--text-sub); text-decoration: none; margin-right: 25px; font-size: 14px; display: flex; align-items: center; gap: 8px; height: 100%; border-bottom: 2px solid transparent; transition: 0.2s; }
         .nav-link:hover { color: var(--text-main); }
-        .nav-link.active {
-            color: var(--text-main);
-            border-bottom-color: #fd8c73;
-        }
-
-        /* [3] Workspace Layout */
-        .workspace {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            height: calc(100vh - 40px - 40px); /* Top 40px + Footer 40px */
-        }
-
-        /* Left Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        .sidebar-header {
-            padding: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .category-label {
-            padding: 12px 15px 5px;
-            font-size: 11px;
-            font-weight: bold;
-            color: #58a6ff;
-            text-transform: uppercase;
-        }
-        .tool-btn {
-            padding: 8px 20px;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text-main);
-            border-left: 3px solid transparent;
-            transition: 0.2s;
-        }
+        .nav-link.active { color: var(--text-main); border-bottom-color: #fd8c73; }
+        .workspace { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 80px); }
+        .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar-header { padding: 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
+        .category-label { padding: 12px 15px 5px; font-size: 11px; font-weight: bold; color: #58a6ff; text-transform: uppercase; }
+        .tool-btn { padding: 8px 20px; cursor: pointer; font-size: 13px; color: var(--text-main); border-left: 3px solid transparent; transition: 0.2s; }
         .tool-btn:hover { background: #21262d; color: white; }
-        .tool-btn.active {
-            background: #21262d;
-            border-left-color: #fd8c73;
-            color: white;
-            font-weight: 600;
-        }
-
-        /* Right Main Panel */
-        .main-panel {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Config Box */
-        .config-box {
-            background: #161b22;
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-        }
+        .tool-btn.active { background: #21262d; border-left-color: #fd8c73; color: white; font-weight: 600; }
+        .main-panel { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .config-box { background: #161b22; padding: 20px; border-radius: 6px; border: 1px solid var(--border-color); }
         .config-title { margin: 0 0 20px 0; color: white; font-size: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; color: var(--text-sub); margin-bottom: 6px; font-size: 12px; }
-        .input-group input, .input-group textarea, .input-group select {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 8px 12px;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 13px;
-        }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         .input-group textarea { height: 70px; resize: vertical; font-family: inherit; }
-        .input-group input:focus, .input-group textarea:focus, .input-group select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
-
-        /* Preview & Code */
-        .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
-        
-        .preview-box {
-            background: white;
-            color: #333;
-            padding: 30px;
-            border-radius: 6px;
-            min-height: 120px;
-            border: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .preview-box { background: white; color: #333; padding: 30px; border-radius: 6px; min-height: 120px; border: 1px solid #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .code-box { width: 100%; height: 120px; background: #0d1117; color: #e6edf3; border: 1px solid var(--border-color); padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; resize: none; box-sizing: border-box; font-size: 12px; line-height: 1.5; }
         .code-wrapper { position: relative; }
-        .code-box {
-            width: 100%;
-            height: 120px;
-            background: #0d1117;
-            color: #e6edf3;
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            resize: none;
-            box-sizing: border-box;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #238636;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .copy-btn:hover { background: #2ea043; }
-        
-        /* Mobile */
-        @media (max-width: 768px) {
-            .workspace { flex-direction: column; height: auto; padding-bottom: 80px; }
-            .sidebar { width: 100%; max-height: 250px; }
-            .nav-link { margin-right: 15px; }
-        }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #238636; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
+        .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
+        @media (max-width: 768px) { .workspace { flex-direction: column; height: auto; padding-bottom: 80px; } .sidebar { width: 100%; max-height: 250px; } .nav-link { margin-right: 15px; } }
     </style>
 </head>
 <body>
@@ -209,27 +48,10 @@
             <div class="sidebar-header">WP Generator Tools</div>
             <div id="sidebarMenu"></div>
         </div>
-
         <div class="main-panel">
-            <div class="config-box">
-                <h2 class="config-title" id="toolTitle">Select a Tool</h2>
-                <div id="inputForm"></div>
-            </div>
-
-            <div>
-                <span class="section-label">Real-time Preview (Visual Check)</span>
-                <div class="preview-box" id="previewBox">
-                    Select a tool from the left menu to start.
-                </div>
-            </div>
-
-            <div>
-                <span class="section-label">HTML Code (Copy & Paste to WordPress Custom HTML Block)</span>
-                <div class="code-wrapper">
-                    <textarea class="code-box" id="resultCode" readonly></textarea>
-                    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
-                </div>
-            </div>
+            <div class="config-box"><h2 class="config-title" id="toolTitle">Select a Tool</h2><div id="inputForm"></div></div>
+            <div><span class="section-label">Real-time Preview (Visual Check)</span><div class="preview-box" id="previewBox">Select a tool...</div></div>
+            <div><span class="section-label">HTML Code</span><div class="code-wrapper"><textarea class="code-box" id="resultCode" readonly></textarea><button class="copy-btn" onclick="copyCode()">Copy Code</button></div></div>
         </div>
     </div>
 
@@ -245,247 +67,167 @@
             </div>
         </div>
         <div style="text-align: center; font-size: 10px; color: #484f58;">
-            <span onclick="openModal('privacyModal')" style="cursor:pointer; margin: 0 6px;">Privacy</span> | 
-            <span onclick="openModal('termsModal')" style="cursor:pointer; margin: 0 6px;">Terms</span> | 
-            <span style="margin-left: 6px;">© 2026 QuickSaveHTML</span>
+            <span onclick="openModal('privacyModal')" style="cursor:pointer; margin: 0 6px;">Privacy</span> | <span onclick="openModal('termsModal')" style="cursor:pointer; margin: 0 6px;">Terms</span> | <span style="margin-left: 6px;">© 2026 QuickSaveHTML</span>
         </div>
     </footer>
 
     <script>
-        /* 25 Essential WordPress Tools List */
         const tools = [
-            // --- 1. Monetization ---
+            // --- 1. MONEY MAKERS (New & Strong) ---
             {
-                id: 'cta-btn', category: '💰 Monetization', name: 'CTA Button',
+                id: 'affiliate-box', category: '💰 Monetization', name: 'Product Box (Amazon Style)',
                 inputs: [
-                    { id: 'text', label: 'Button Text', type: 'text', val: 'Get Started Now' },
-                    { id: 'link', label: 'Target URL', type: 'text', val: '#' },
-                    { id: 'color', label: 'Color Theme', type: 'select', options: {'#ef4444':'Red (Urgent)', '#3b82f6':'Blue (Trust)', '#10b981':'Green (Success)', '#f59e0b':'Orange (Warning)', '#000000':'Black (Premium)'} }
-                ],
-                template: (d) => `<div style="text-align:center; margin:30px 0;"><a href="${d.link}" target="_blank" style="background:${d.color}; color:white; padding:15px 40px; text-decoration:none; font-weight:bold; font-size:18px; border-radius:50px; box-shadow:0 4px 6px rgba(0,0,0,0.15); transition: transform 0.2s; display:inline-block;">${d.text} ➤</a></div>`
-            },
-            {
-                id: 'pros-cons', category: '💰 Monetization', name: 'Pros & Cons Box',
-                inputs: [
-                    { id: 'pros', label: 'Pros (One per line)', type: 'textarea', val: 'Fast Shipping\nHigh Quality\nAffordable' },
-                    { id: 'cons', label: 'Cons (One per line)', type: 'textarea', val: 'Limited Stock\nNo International Shipping' }
+                    { id: 'title', label: 'Product Name', type: 'text', val: 'Sony WH-1000XM5 Headphones' },
+                    { id: 'img', label: 'Image URL', type: 'text', placeholder: 'https://example.com/image.jpg' },
+                    { id: 'desc', label: 'Key Features', type: 'textarea', val: 'Noise Cancelling\n30-hour Battery\nUltra Comfortable' },
+                    { id: 'link', label: 'Affiliate Link', type: 'text', val: '#' }
                 ],
                 template: (d) => {
-                    const pros = d.pros.split('\n').filter(t=>t).map(t => `<li style="margin-bottom:6px;">✅ ${t}</li>`).join('');
-                    const cons = d.cons.split('\n').filter(t=>t).map(t => `<li style="margin-bottom:6px;">⛔ ${t}</li>`).join('');
-                    return `<div style="display:flex; gap:20px; flex-wrap:wrap; margin:20px 0;"><div style="flex:1; min-width:280px; background:#f0fdf4; border:1px solid #bbf7d0; padding:20px; border-radius:8px;"><h4 style="margin:0 0 10px 0; color:#166534; font-size:18px;">👍 The Good</h4><ul style="list-style:none; padding:0; margin:0; color:#14532d;">${pros}</ul></div><div style="flex:1; min-width:280px; background:#fef2f2; border:1px solid #fecaca; padding:20px; border-radius:8px;"><h4 style="margin:0 0 10px 0; color:#991b1b; font-size:18px;">👎 The Bad</h4><ul style="list-style:none; padding:0; margin:0; color:#7f1d1d;">${cons}</ul></div></div>`;
+                    const feats = d.desc.split('\n').map(t=>`<li>${t}</li>`).join('');
+                    return `<div style="border:1px solid #ddd; padding:20px; border-radius:8px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; background:white; margin:20px 0;"><div style="flex:1; min-width:150px; text-align:center;"><img src="${d.img||'https://via.placeholder.com/150'}" style="max-width:100%; border-radius:8px;"></div><div style="flex:2; min-width:250px;"><h3 style="margin:0 0 10px 0;">${d.title}</h3><ul style="color:#555; padding-left:20px; margin-bottom:15px;">${feats}</ul><a href="${d.link}" target="_blank" style="display:inline-block; background:#ff9900; color:black; padding:10px 25px; text-decoration:none; font-weight:bold; border-radius:5px;">Buy Now on Amazon ➤</a></div></div>`;
                 }
             },
             {
                 id: 'pricing-table', category: '💰 Monetization', name: 'Pricing Card',
                 inputs: [
                     { id: 'plan', label: 'Plan Name', type: 'text', val: 'Pro Plan' },
-                    { id: 'price', label: 'Price (e.g., $29)', type: 'text', val: '$29' },
-                    { id: 'features', label: 'Features (One per line)', type: 'textarea', val: 'Unlimited Access\n24/7 Support\nFree Updates' },
-                    { id: 'link', label: 'Button Link', type: 'text', val: '#' }
+                    { id: 'price', label: 'Price', type: 'text', val: '$29' },
+                    { id: 'features', label: 'Features (Line separated)', type: 'textarea', val: 'Unlimited Access\n24/7 Support' },
+                    { id: 'link', label: 'Link', type: 'text', val: '#' }
                 ],
-                template: (d) => {
-                    const feats = d.features.split('\n').filter(t=>t).map(t => `<li style="margin-bottom:10px; color:#555;">✔️ ${t}</li>`).join('');
-                    return `<div style="border:1px solid #ddd; border-radius:10px; padding:30px; text-align:center; max-width:350px; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.05); background:white;"><h3 style="margin:0; color:#333; font-size:22px;">${d.plan}</h3><div style="font-size:40px; font-weight:bold; color:#2563eb; margin:15px 0;">${d.price}<span style="font-size:14px; color:#888; font-weight:normal;">/mo</span></div><ul style="list-style:none; padding:0; margin:20px 0; text-align:left;">${feats}</ul><a href="${d.link}" style="display:block; background:#2563eb; color:white; padding:12px; border-radius:6px; text-decoration:none; font-weight:bold;">Choose Plan</a></div>`;
-                }
+                template: (d) => `<div style="border:1px solid #ddd; border-radius:10px; padding:30px; text-align:center; max-width:300px; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.05); background:white;"><h3 style="margin:0; color:#333;">${d.plan}</h3><div style="font-size:36px; font-weight:bold; color:#2563eb; margin:15px 0;">${d.price}</div><ul style="list-style:none; padding:0; margin:20px 0;">${d.features.split('\n').map(t=>`<li style="margin-bottom:8px;">✔️ ${t}</li>`).join('')}</ul><a href="${d.link}" style="display:block; background:#2563eb; color:white; padding:12px; border-radius:6px; text-decoration:none; font-weight:bold;">Choose Plan</a></div>`
+            },
+            {
+                id: 'pros-cons', category: '💰 Monetization', name: 'Pros & Cons Box',
+                inputs: [
+                    { id: 'pros', label: 'Pros', type: 'textarea', val: 'Fast Shipping\nGood Quality' },
+                    { id: 'cons', label: 'Cons', type: 'textarea', val: 'Expensive' }
+                ],
+                template: (d) => `<div style="display:flex; gap:15px; flex-wrap:wrap; margin:20px 0;"><div style="flex:1; min-width:250px; background:#f0fdf4; border:1px solid #bbf7d0; padding:15px; border-radius:6px;"><h4 style="margin:0 0 10px 0; color:#166534;">👍 Pros</h4><ul style="margin:0; padding-left:20px; color:#14532d;">${d.pros.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div><div style="flex:1; min-width:250px; background:#fef2f2; border:1px solid #fecaca; padding:15px; border-radius:6px;"><h4 style="margin:0 0 10px 0; color:#991b1b;">👎 Cons</h4><ul style="margin:0; padding-left:20px; color:#7f1d1d;">${d.cons.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div></div>`
             },
             {
                 id: 'coupon-box', category: '💰 Monetization', name: 'Coupon Box',
-                inputs: [
-                    { id: 'code', label: 'Coupon Code', type: 'text', val: 'SAVE2025' },
-                    { id: 'desc', label: 'Description', type: 'text', val: 'Use this code at checkout for 20% OFF' }
-                ],
-                template: (d) => `<div style="border:2px dashed #3b82f6; background:#eff6ff; padding:20px; text-align:center; border-radius:8px; margin:20px 0;"><p style="margin:0 0 10px 0; color:#1e40af; font-weight:bold;">${d.desc}</p><span style="font-size:24px; font-weight:bold; color:#1d4ed8; background:white; padding:8px 20px; border:1px solid #bfdbfe; border-radius:4px; display:inline-block; letter-spacing:1px;">${d.code}</span></div>`
+                inputs: [{ id: 'code', label: 'Code', type: 'text', val: 'SALE2025' }, { id: 'desc', label: 'Description', type: 'text', val: 'Get 20% OFF' }],
+                template: (d) => `<div style="border:2px dashed #3b82f6; background:#eff6ff; padding:20px; text-align:center; border-radius:8px; margin:20px 0;"><p style="margin:0 0 10px 0; color:#1e40af; font-weight:bold;">${d.desc}</p><span style="font-size:24px; font-weight:bold; color:#1d4ed8; background:white; padding:8px 20px; border:1px solid #bfdbfe; border-radius:4px; display:inline-block;">${d.code}</span></div>`
+            },
+            {
+                id: 'cta-btn', category: '💰 Monetization', name: 'CTA Button',
+                inputs: [{ id: 'text', label: 'Text', type: 'text', val: 'Click Here' }, { id: 'link', label: 'Link', type: 'text', val: '#' }, { id: 'color', label: 'Color', type: 'select', options: {'#ef4444':'Red', '#3b82f6':'Blue', '#10b981':'Green'} }],
+                template: (d) => `<div style="text-align:center; margin:30px 0;"><a href="${d.link}" style="background:${d.color}; color:white; padding:15px 40px; text-decoration:none; font-weight:bold; font-size:18px; border-radius:50px; display:inline-block;">${d.text} ➤</a></div>`
+            },
+            {
+                id: 'comparison', category: '💰 Monetization', name: 'Comparison Table (A vs B)',
+                inputs: [{ id: 'prodA', label: 'Product A', type: 'text', val: 'iPhone 15' }, { id: 'prodB', label: 'Product B', type: 'text', val: 'Galaxy S24' }],
+                template: (d) => `<table style="width:100%; border-collapse:collapse; margin:20px 0; text-align:center;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px; border:1px solid #ddd;">Feature</th><th style="padding:10px; border:1px solid #ddd; color:#2563eb;">${d.prodA}</th><th style="padding:10px; border:1px solid #ddd; color:#2563eb;">${d.prodB}</th></tr></thead><tbody><tr><td style="padding:10px; border:1px solid #ddd;">Price</td><td style="padding:10px; border:1px solid #ddd;">$799</td><td style="padding:10px; border:1px solid #ddd;">$799</td></tr><tr><td style="padding:10px; border:1px solid #ddd;">Battery</td><td style="padding:10px; border:1px solid #ddd;">20h</td><td style="padding:10px; border:1px solid #ddd;">22h</td></tr></tbody></table>`
             },
 
-            // --- 2. Design & UI ---
-            {
-                id: 'alert-box', category: '🎨 Design & UI', name: 'Alert / Info Box',
-                inputs: [
-                    { id: 'type', label: 'Style', type: 'select', options: {'#eff6ff,#1e40af': 'ℹ️ Info (Blue)', '#f0fdf4,#15803d': '✅ Success (Green)', '#fef2f2,#b91c1c': '⚠️ Warning (Red)', '#fffbeb,#b45309': '💡 Tip (Yellow)'} },
-                    { id: 'content', label: 'Message', type: 'textarea', val: 'This is an important note for your readers.' }
-                ],
-                template: (d) => {
-                    const [bg, color] = d.type.split(',');
-                    return `<div style="background:${bg}; color:${color}; padding:15px 20px; border-left:5px solid ${color}; border-radius:4px; margin:20px 0; font-size:16px;">${d.content}</div>`;
-                }
-            },
-            {
-                id: 'highlight', category: '🎨 Design & UI', name: 'Highlight Text',
-                inputs: [
-                    { id: 'text', label: 'Text to Highlight', type: 'text', val: 'Super Important Text' },
-                    { id: 'color', label: 'Color', type: 'select', options: {'#fde047':'Yellow', '#86efac':'Green', '#93c5fd':'Blue', '#fca5a5':'Red'} }
-                ],
-                template: (d) => `<span style="background:linear-gradient(to top, ${d.color} 50%, transparent 50%); font-weight:bold; padding:0 4px;">${d.text}</span>`
-            },
-            {
-                id: 'divider', category: '🎨 Design & UI', name: 'Styled Divider',
-                inputs: [
-                    { id: 'style', label: 'Style', type: 'select', options: {'dashed':'Dashed (- - -)', 'dotted':'Dotted (· · ·)', 'double':'Double Line (=)', 'solid':'Solid Line (—)'} }
-                ],
-                template: (d) => `<hr style="width:100%; border:0; border-top:3px ${d.style} #ccc; margin:40px 0;">`
-            },
-            {
-                id: 'blockquote', category: '🎨 Design & UI', name: 'Modern Blockquote',
-                inputs: [
-                    { id: 'quote', label: 'Quote', type: 'textarea', val: 'Simplicity is the ultimate sophistication.' },
-                    { id: 'author', label: 'Author', type: 'text', val: 'Leonardo da Vinci' }
-                ],
-                template: (d) => `<blockquote style="border-left:5px solid #333; margin:20px 0; padding-left:20px; font-style:italic; font-size:18px; color:#555;">"${d.quote}"<footer style="margin-top:10px; font-size:14px; font-weight:bold; color:#333;">— ${d.author}</footer></blockquote>`
-            },
-            {
-                id: 'dropcap', category: '🎨 Design & UI', name: 'Drop Cap',
-                inputs: [
-                    { id: 'letter', label: 'First Letter', type: 'text', val: 'L' },
-                    { id: 'text', label: 'Remaining Text', type: 'textarea', val: 'orem ipsum dolor sit amet, consectetur adipiscing elit.' }
-                ],
-                template: (d) => `<p><span style="float:left; font-size:3.5em; line-height:0.8; font-weight:bold; margin-right:8px; color:#333;">${d.letter}</span>${d.text}</p><div style="clear:both;"></div>`
-            },
-            {
-                id: 'gradient-text', category: '🎨 Design & UI', name: 'Gradient Text Headline',
-                inputs: [
-                    { id: 'text', label: 'Headline Text', type: 'text', val: 'Awesome Headline' },
-                    { id: 'scheme', label: 'Gradient', type: 'select', options: {'linear-gradient(45deg, #f3ec78, #af4261)':'Sunset', 'linear-gradient(45deg, #00c6ff, #0072ff)':'Ocean', 'linear-gradient(45deg, #11998e, #38ef7d)':'Nature'} }
-                ],
-                template: (d) => `<h2 style="background:${d.scheme}; -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:inline-block; font-size:32px; margin:10px 0;">${d.text}</h2>`
-            },
-
-            // --- 3. Structure & Layout ---
+            // --- 2. STRUCTURE & LAYOUT ---
             {
                 id: 'faq', category: '🧱 Structure', name: 'FAQ Accordion',
-                inputs: [
-                    { id: 'q', label: 'Question', type: 'text', val: 'Is this refundable?' },
-                    { id: 'a', label: 'Answer', type: 'textarea', val: 'Yes, we offer a 30-day money-back guarantee.' }
-                ],
-                template: (d) => `<details style="margin:10px 0; border:1px solid #e5e7eb; border-radius:8px; padding:12px; background:white;"><summary style="font-weight:bold; cursor:pointer; font-size:16px; color:#1f2937;">❓ ${d.q}</summary><div style="padding:15px 5px 5px 5px; color:#4b5563; border-top:1px solid #f3f4f6; margin-top:10px; line-height:1.6;">${d.a}</div></details>`
+                inputs: [{ id: 'q', label: 'Question', type: 'text', val: 'Is it refundable?' }, { id: 'a', label: 'Answer', type: 'textarea', val: 'Yes, within 30 days.' }],
+                template: (d) => `<details style="margin:10px 0; border:1px solid #e5e7eb; border-radius:8px; padding:12px; background:white;"><summary style="font-weight:bold; cursor:pointer;">❓ ${d.q}</summary><div style="padding:10px 0 0 0; color:#555; line-height:1.6;">${d.a}</div></details>`
             },
             {
                 id: 'toc', category: '🧱 Structure', name: 'Table of Contents',
-                inputs: [
-                    { id: 'l1', label: 'Link 1 Name', type: 'text', val: 'Introduction' },
-                    { id: 'l2', label: 'Link 2 Name', type: 'text', val: 'Main Features' },
-                    { id: 'l3', label: 'Link 3 Name', type: 'text', val: 'Conclusion' }
-                ],
-                template: (d) => `<div style="background:#f9fafb; padding:20px; border-radius:8px; border:1px solid #e5e7eb; display:inline-block; min-width:250px;"><h4 style="margin-top:0; margin-bottom:10px;">📑 Table of Contents</h4><ul style="margin:0; padding-left:20px;"><li style="margin-bottom:5px;"><a href="#section1" style="text-decoration:none; color:#2563eb;">${d.l1}</a></li><li style="margin-bottom:5px;"><a href="#section2" style="text-decoration:none; color:#2563eb;">${d.l2}</a></li><li style="margin-bottom:5px;"><a href="#section3" style="text-decoration:none; color:#2563eb;">${d.l3}</a></li></ul></div>`
-            },
-            {
-                id: 'feature-list', category: '🧱 Structure', name: 'Feature List',
-                inputs: [
-                    { id: 'items', label: 'Features (One per line)', type: 'textarea', val: 'Easy to Use\nMobile Friendly\nSecure' }
-                ],
-                template: (d) => {
-                    const lis = d.items.split('\n').filter(t=>t).map(t => `<li style="margin-bottom:8px; display:flex; align-items:center; gap:10px;"><span style="background:#dbeafe; color:#1e40af; padding:2px 6px; border-radius:50%; font-size:12px;">✓</span> ${t}</li>`).join('');
-                    return `<ul style="list-style:none; padding:0; font-size:16px; color:#333;">${lis}</ul>`
-                }
+                inputs: [{ id: 'title', label: 'Title', type: 'text', val: 'Table of Contents' }],
+                template: (d) => `<div style="background:#f9fafb; padding:20px; border-radius:8px; border:1px solid #e5e7eb; display:inline-block;"><h4 style="margin:0 0 10px 0;">${d.title}</h4><ul style="margin:0; padding-left:20px;"><li><a href="#1">Introduction</a></li><li><a href="#2">Main Point</a></li><li><a href="#3">Conclusion</a></li></ul></div>`
             },
             {
                 id: 'grid-2col', category: '🧱 Structure', name: '2-Column Grid',
-                inputs: [
-                    { id: 'left', label: 'Left Column', type: 'textarea', val: 'Left side content here.' },
-                    { id: 'right', label: 'Right Column', type: 'textarea', val: 'Right side content here.' }
-                ],
-                template: (d) => `<div style="display:flex; flex-wrap:wrap; gap:20px; margin:20px 0;"><div style="flex:1; min-width:300px; padding:15px; background:#f9f9f9; border-radius:8px;">${d.left}</div><div style="flex:1; min-width:300px; padding:15px; background:#f9f9f9; border-radius:8px;">${d.right}</div></div>`
-            },
-            {
-                id: 'step-box', category: '🧱 Structure', name: 'Step / Process Box',
-                inputs: [
-                    { id: 'num', label: 'Step Number', type: 'text', val: '01' },
-                    { id: 'title', label: 'Title', type: 'text', val: 'Sign Up' },
-                    { id: 'desc', label: 'Description', type: 'textarea', val: 'Create an account in 30 seconds.' }
-                ],
-                template: (d) => `<div style="display:flex; align-items:start; gap:15px; margin:20px 0;"><div style="background:#2563eb; color:white; font-weight:bold; width:40px; height:40px; border-radius:50%; display:flex; justify-content:center; align-items:center; flex-shrink:0;">${d.num}</div><div><h4 style="margin:0 0 5px 0; font-size:18px;">${d.title}</h4><p style="margin:0; color:#666;">${d.desc}</p></div></div>`
+                inputs: [{ id: 'l', label: 'Left', type: 'textarea', val: 'Text Left' }, { id: 'r', label: 'Right', type: 'textarea', val: 'Text Right' }],
+                template: (d) => `<div style="display:flex; flex-wrap:wrap; gap:20px; margin:20px 0;"><div style="flex:1; min-width:300px; padding:15px; background:#f9f9f9;">${d.l}</div><div style="flex:1; min-width:300px; padding:15px; background:#f9f9f9;">${d.r}</div></div>`
             },
             {
                 id: 'timeline', category: '🧱 Structure', name: 'Vertical Timeline',
-                inputs: [
-                    { id: 'year1', label: 'Year / Time 1', type: 'text', val: '2023' },
-                    { id: 'event1', label: 'Event 1', type: 'text', val: 'Project Started' },
-                    { id: 'year2', label: 'Year / Time 2', type: 'text', val: '2024' },
-                    { id: 'event2', label: 'Event 2', type: 'text', val: 'Launch MVP' }
-                ],
-                template: (d) => `<div style="border-left:2px solid #ddd; padding-left:20px; margin-left:10px;"><div style="margin-bottom:20px; position:relative;"><div style="position:absolute; left:-26px; top:0; width:12px; height:12px; background:#2563eb; border-radius:50%;"></div><div style="font-weight:bold; color:#2563eb;">${d.year1}</div><div>${d.event1}</div></div><div style="margin-bottom:20px; position:relative;"><div style="position:absolute; left:-26px; top:0; width:12px; height:12px; background:#2563eb; border-radius:50%;"></div><div style="font-weight:bold; color:#2563eb;">${d.year2}</div><div>${d.event2}</div></div></div>`
+                inputs: [{ id: 'y1', label: 'Year 1', type: 'text', val: '2024' }, { id: 'e1', label: 'Event 1', type: 'text', val: 'Launched' }, { id: 'y2', label: 'Year 2', type: 'text', val: '2025' }, { id: 'e2', label: 'Event 2', type: 'text', val: 'Expanded' }],
+                template: (d) => `<div style="border-left:2px solid #ddd; padding-left:20px; margin-left:10px;"><div style="margin-bottom:20px; position:relative;"><div style="position:absolute; left:-26px; top:0; width:12px; height:12px; background:#2563eb; border-radius:50%;"></div><strong>${d.y1}</strong><br>${d.e1}</div><div><div style="position:absolute; left:-26px; top:0; width:12px; height:12px; background:#2563eb; border-radius:50%;"></div><strong>${d.y2}</strong><br>${d.e2}</div></div>`
             },
             {
                 id: 'responsive-table', category: '🧱 Structure', name: 'Responsive Table',
-                inputs: [
-                    { id: 'h1', label: 'Header 1', type: 'text', val: 'Product' },
-                    { id: 'h2', label: 'Header 2', type: 'text', val: 'Price' },
-                    { id: 'h3', label: 'Header 3', type: 'text', val: 'Rating' }
-                ],
-                template: (d) => `<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; min-width:500px; font-size:15px;"><thead><tr style="background:#f3f4f6; text-align:left;"><th style="padding:12px; border:1px solid #ddd;">${d.h1}</th><th style="padding:12px; border:1px solid #ddd;">${d.h2}</th><th style="padding:12px; border:1px solid #ddd;">${d.h3}</th></tr></thead><tbody><tr><td style="padding:12px; border:1px solid #ddd;">Sample Item</td><td style="padding:12px; border:1px solid #ddd;">$100</td><td style="padding:12px; border:1px solid #ddd;">5 Stars</td></tr></tbody></table></div>`
+                inputs: [{ id: 'h1', label: 'Head 1', type: 'text', val: 'Item' }, { id: 'h2', label: 'Head 2', type: 'text', val: 'Cost' }],
+                template: (d) => `<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; min-width:400px;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px; border:1px solid #ddd;">${d.h1}</th><th style="padding:10px; border:1px solid #ddd;">${d.h2}</th></tr></thead><tbody><tr><td style="padding:10px; border:1px solid #ddd;">A</td><td style="padding:10px; border:1px solid #ddd;">$10</td></tr></tbody></table></div>`
+            },
+            {
+                id: 'step-box', category: '🧱 Structure', name: 'Step Box',
+                inputs: [{ id: 'num', label: 'Number', type: 'text', val: '01' }, { id: 'title', label: 'Title', type: 'text', val: 'Sign Up' }, { id: 'desc', label: 'Desc', type: 'textarea', val: 'Go to settings.' }],
+                template: (d) => `<div style="display:flex; gap:15px; margin:20px 0;"><div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:bold;">${d.num}</div><div><h4 style="margin:0;">${d.title}</h4><p style="margin:5px 0 0 0; color:#666;">${d.desc}</p></div></div>`
             },
 
-            // --- 4. Social & Media ---
+            // --- 3. SOCIAL & MEDIA ---
+            {
+                id: 'link-bio', category: '📢 Social & Media', name: 'Link In Bio Card',
+                inputs: [{ id: 'name', label: 'Name', type: 'text', val: '@MyName' }, { id: 'bio', label: 'Bio', type: 'text', val: 'Check my links below' }],
+                template: (d) => `<div style="max-width:350px; margin:0 auto; text-align:center; padding:30px; border:1px solid #ddd; border-radius:15px; background:#fafafa;"><div style="width:80px; height:80px; background:#ddd; border-radius:50%; margin:0 auto 15px;"></div><h3 style="margin:0;">${d.name}</h3><p style="color:#666; margin-bottom:20px;">${d.bio}</p><a href="#" style="display:block; background:white; border:1px solid #ccc; padding:12px; margin-bottom:10px; text-decoration:none; color:black; border-radius:8px;">Link 1</a><a href="#" style="display:block; background:white; border:1px solid #ccc; padding:12px; margin-bottom:10px; text-decoration:none; color:black; border-radius:8px;">Link 2</a></div>`
+            },
             {
                 id: 'review-box', category: '📢 Social & Media', name: 'Review / Testimonial',
-                inputs: [
-                    { id: 'name', label: 'Reviewer Name', type: 'text', val: 'Jane Doe' },
-                    { id: 'stars', label: 'Stars', type: 'text', val: '⭐⭐⭐⭐⭐' },
-                    { id: 'text', label: 'Review Text', type: 'textarea', val: 'This product changed my life! Highly recommended.' }
-                ],
-                template: (d) => `<div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; text-align:center;"><div style="font-size:20px; margin-bottom:10px;">${d.stars}</div><p style="font-style:italic; color:#555; margin-bottom:15px;">"${d.text}"</p><div style="font-weight:bold; color:#333;">- ${d.name}</div></div>`
+                inputs: [{ id: 'name', label: 'Name', type: 'text', val: 'John Doe' }, { id: 'text', label: 'Review', type: 'textarea', val: 'Amazing service!' }],
+                template: (d) => `<div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; text-align:center;"><div style="font-size:20px; margin-bottom:10px;">⭐⭐⭐⭐⭐</div><p style="font-style:italic;">"${d.text}"</p><strong>- ${d.name}</strong></div>`
             },
             {
-                id: 'author-box', category: '📢 Social & Media', name: 'Author Bio Box',
-                inputs: [
-                    { id: 'name', label: 'Name', type: 'text', val: 'John Smith' },
-                    { id: 'bio', label: 'Bio', type: 'textarea', val: 'Editor-in-chief and tech enthusiast with 10 years of experience.' }
-                ],
-                template: (d) => `<div style="display:flex; gap:15px; background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; align-items:center;"><div style="width:60px; height:60px; background:#ddd; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:24px;">👤</div><div><h4 style="margin:0 0 5px 0;">${d.name}</h4><p style="margin:0; font-size:14px; color:#666;">${d.bio}</p></div></div>`
-            },
-            {
-                id: 'click-to-tweet', category: '📢 Social & Media', name: 'Click to Tweet',
-                inputs: [
-                    { id: 'quote', label: 'Tweet Content', type: 'text', val: 'This is an amazing insight!' },
-                    { id: 'link', label: 'Share Link', type: 'text', val: 'https://twitter.com/intent/tweet?text=This%20is%20amazing!' }
-                ],
-                template: (d) => `<div style="border:2px solid #1da1f2; padding:20px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:20px;"><div style="font-size:18px; font-weight:bold;">"${d.quote}"</div><a href="${d.link}" target="_blank" style="background:#1da1f2; color:white; padding:10px 20px; border-radius:50px; text-decoration:none; font-weight:bold; white-space:nowrap;">Tweet This 🐦</a></div>`
+                id: 'click-tweet', category: '📢 Social & Media', name: 'Click to Tweet',
+                inputs: [{ id: 'q', label: 'Quote', type: 'text', val: 'This is awesome!' }],
+                template: (d) => `<div style="border:2px solid #1da1f2; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><span>"${d.q}"</span><a href="#" style="background:#1da1f2; color:white; padding:8px 15px; border-radius:20px; text-decoration:none; font-size:12px; font-weight:bold; white-space:nowrap;">Tweet 🐦</a></div>`
             },
             {
                 id: 'youtube', category: '📢 Social & Media', name: 'Responsive YouTube',
-                inputs: [
-                    { id: 'url', label: 'Embed URL (src from share code)', type: 'text', placeholder: 'https://www.youtube.com/embed/VIDEO_ID' }
-                ],
-                template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:100%; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
-            },
-            {
-                id: 'gmaps', category: '📢 Social & Media', name: 'Google Maps Embed',
-                inputs: [
-                    { id: 'url', label: 'Embed Map Link (src)', type: 'text', placeholder: 'https://www.google.com/maps/embed?...' }
-                ],
+                inputs: [{ id: 'url', label: 'Embed URL', type: 'text', placeholder: 'https://www.youtube.com/embed/...' }],
                 template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
             },
             {
-                id: 'progress', category: '📢 Social & Media', name: 'Progress Bar',
-                inputs: [
-                    { id: 'val', label: 'Percentage (0-100)', type: 'number', val: '75' },
-                    { id: 'label', label: 'Label', type: 'text', val: 'Loading...' }
-                ],
-                template: (d) => `<div style="margin:20px 0;"><div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:14px; font-weight:bold;"><span>${d.label}</span><span>${d.val}%</span></div><div style="background:#e5e7eb; border-radius:10px; height:10px; overflow:hidden;"><div style="background:#3b82f6; width:${d.val}%; height:100%;"></div></div></div>`
+                id: 'gmap', category: '📢 Social & Media', name: 'Google Maps',
+                inputs: [{ id: 'url', label: 'Embed Link', type: 'text', placeholder: 'https://www.google.com/maps/embed?...' }],
+                template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
             },
             {
-                id: 'social-share', category: '📢 Social & Media', name: 'Social Share Links',
-                inputs: [
-                    { id: 'text', label: 'Call to Action', type: 'text', val: 'Share this post:' }
-                ],
-                template: (d) => `<div style="margin:20px 0; text-align:center;"><p style="margin-bottom:10px; color:#666; font-size:14px;">${d.text}</p><a href="#" style="display:inline-block; padding:8px 15px; background:#3b5998; color:white; text-decoration:none; border-radius:4px; margin:0 5px; font-size:13px;">Facebook</a><a href="#" style="display:inline-block; padding:8px 15px; background:#1da1f2; color:white; text-decoration:none; border-radius:4px; margin:0 5px; font-size:13px;">Twitter</a><a href="#" style="display:inline-block; padding:8px 15px; background:#0e76a8; color:white; text-decoration:none; border-radius:4px; margin:0 5px; font-size:13px;">LinkedIn</a></div>`
+                id: 'author', category: '📢 Social & Media', name: 'Author Box',
+                inputs: [{ id: 'name', label: 'Name', type: 'text', val: 'Author Name' }, { id: 'bio', label: 'Bio', type: 'textarea', val: 'I write about tech.' }],
+                template: (d) => `<div style="display:flex; gap:15px; background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; align-items:center;"><div style="width:60px; height:60px; background:#ddd; border-radius:50%;"></div><div><h4 style="margin:0;">${d.name}</h4><p style="margin:5px 0 0 0; font-size:14px; color:#666;">${d.bio}</p></div></div>`
             },
             {
-                id: 'code-snippet', category: '📢 Social & Media', name: 'Code Snippet Box',
-                inputs: [
-                    { id: 'code', label: 'Code', type: 'textarea', val: 'console.log("Hello World");' }
-                ],
-                template: (d) => `<pre style="background:#2d2d2d; color:#ccc; padding:15px; border-radius:5px; overflow-x:auto; font-family:monospace; font-size:14px;"><code>${d.code.replace(/</g, '&lt;')}</code></pre>`
+                id: 'social-share', category: '📢 Social & Media', name: 'Social Links',
+                inputs: [{ id: 'txt', label: 'Label', type: 'text', val: 'Share:' }],
+                template: (d) => `<div style="text-align:center; margin:20px 0;"><p style="margin-bottom:10px; color:#666;">${d.txt}</p><a href="#" style="padding:8px 15px; background:#3b5998; color:white; text-decoration:none; border-radius:4px; margin:5px;">FB</a><a href="#" style="padding:8px 15px; background:#1da1f2; color:white; text-decoration:none; border-radius:4px; margin:5px;">TW</a></div>`
+            },
+
+            // --- 4. DESIGN & UI ---
+            {
+                id: 'glass-card', category: '🎨 Design & UI', name: 'Glassmorphism Card',
+                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Modern Design' }],
+                template: (d) => `<div style="background: rgba(255, 255, 255, 0.25); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); backdrop-filter: blur(4px); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.18); padding:30px; text-align:center; margin:20px 0;"><h3>${d.txt}</h3></div>`
+            },
+            {
+                id: 'alert-box', category: '🎨 Design & UI', name: 'Alert / Info Box',
+                inputs: [{ id: 'type', label: 'Color', type: 'select', options: {'#eff6ff,#1e40af':'Blue', '#f0fdf4,#15803d':'Green', '#fef2f2,#b91c1c':'Red'} }, { id: 'txt', label: 'Text', type: 'textarea', val: 'Notice here.' }],
+                template: (d) => { const c = d.type.split(','); return `<div style="background:${c[0]}; color:${c[1]}; padding:15px; border-left:5px solid ${c[1]}; border-radius:4px; margin:20px 0;">${d.txt}</div>` }
+            },
+            {
+                id: 'gradient-text', category: '🎨 Design & UI', name: 'Gradient Headline',
+                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Amazing Title' }],
+                template: (d) => `<h2 style="background:linear-gradient(45deg, #f3ec78, #af4261); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:inline-block;">${d.txt}</h2>`
+            },
+            {
+                id: 'highlight', category: '🎨 Design & UI', name: 'Highlight Marker',
+                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Important' }],
+                template: (d) => `<span style="background:linear-gradient(to top, #fde047 50%, transparent 50%); font-weight:bold; padding:0 4px;">${d.txt}</span>`
+            },
+            {
+                id: 'divider', category: '🎨 Design & UI', name: 'Styled Divider',
+                inputs: [{ id: 's', label: 'Style', type: 'select', options: {'dashed':'Dashed', 'dotted':'Dotted', 'double':'Double'} }],
+                template: (d) => `<hr style="width:100%; border:0; border-top:3px ${d.s} #ccc; margin:40px 0;">`
+            },
+            {
+                id: 'quote', category: '🎨 Design & UI', name: 'Modern Quote',
+                inputs: [{ id: 'q', label: 'Quote', type: 'textarea', val: 'Be yourself.' }, { id: 'a', label: 'Author', type: 'text', val: 'Oscar Wilde' }],
+                template: (d) => `<blockquote style="border-left:5px solid #333; margin:20px 0; padding-left:20px; font-style:italic; font-size:18px; color:#555;">"${d.q}"<br><strong style="font-size:14px; color:#333;">— ${d.a}</strong></blockquote>`
             }
         ];
 
-        /* --- System Logic (Fixed & Verified) --- */
+        // --- Core Logic ---
         let currentTool = null;
         function init() {
             const menu = document.getElementById('sidebarMenu');
-            // Clean up old elements just in case
             menu.innerHTML = '';
-            
             let lastCategory = '';
             tools.forEach(tool => {
                 if (tool.category !== lastCategory) {
@@ -507,34 +249,23 @@
             currentTool = tools.find(t => t.id === id);
             document.querySelectorAll('.tool-btn').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
-            
             document.getElementById('toolTitle').textContent = currentTool.name;
             const formBox = document.getElementById('inputForm');
             formBox.innerHTML = '';
-            
             currentTool.inputs.forEach(inp => {
                 const group = document.createElement('div');
                 group.className = 'input-group';
                 const label = document.createElement('label');
                 label.textContent = inp.label;
                 group.appendChild(label);
-                
                 let inputEl;
-                if (inp.type === 'textarea') {
-                    inputEl = document.createElement('textarea');
-                } else if (inp.type === 'select') {
+                if (inp.type === 'textarea') { inputEl = document.createElement('textarea'); }
+                else if (inp.type === 'select') {
                     inputEl = document.createElement('select');
                     for (const [val, name] of Object.entries(inp.options)) {
-                        const opt = document.createElement('option');
-                        opt.value = val;
-                        opt.textContent = name;
-                        inputEl.appendChild(opt);
+                        const opt = document.createElement('option'); opt.value = val; opt.textContent = name; inputEl.appendChild(opt);
                     }
-                } else {
-                    inputEl = document.createElement('input');
-                    inputEl.type = inp.type;
-                }
-                
+                } else { inputEl = document.createElement('input'); inputEl.type = inp.type; }
                 if (inp.val) inputEl.value = inp.val;
                 if (inp.placeholder) inputEl.placeholder = inp.placeholder;
                 inputEl.id = `inp-${inp.id}`;
@@ -547,9 +278,7 @@
         function generate() {
             if (!currentTool) return;
             const data = {};
-            currentTool.inputs.forEach(inp => {
-                data[inp.id] = document.getElementById(`inp-${inp.id}`).value;
-            });
+            currentTool.inputs.forEach(inp => { data[inp.id] = document.getElementById(`inp-${inp.id}`).value; });
             const html = currentTool.template(data);
             document.getElementById('previewBox').innerHTML = html;
             document.getElementById('resultCode').value = html;
@@ -559,14 +288,13 @@
             code.select();
             document.execCommand('copy');
             const btn = document.querySelector('.copy-btn');
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied! 🎉';
-            btn.style.background = '#2ea043';
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.background = '#238636';
-            }, 2000);
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy Code', 2000);
         }
+        // Modal Logic
+        function openModal(id) { alert("This would open the " + id); } 
+        // (For real modals, keep your previous modal code in index.html, this is just a placeholder for the footer links to not crash)
+
         init();
     </script>
 </body>
