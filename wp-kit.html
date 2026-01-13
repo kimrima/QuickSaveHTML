@@ -6,7 +6,7 @@
     <title>WP Ultimate Kit - QuickSaveHTML</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [1] 디자인 변수 (메인 사이트와 통일) */
+        /* [1] Design Variables */
         :root {
             --primary: #2563eb;
             --bg-dark: #111827;
@@ -16,136 +16,48 @@
             --border: #374151;
         }
         
-        body { 
-            margin: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: var(--bg-dark); 
-            color: var(--text-main); 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; 
-            overflow: hidden; /* PC에서는 스크롤 방지 (앱처럼) */
-        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        /* [2] 네비게이션 바 (모바일 대응 추가) */
-        .nav-bar { 
-            background: #0f172a; 
-            border-bottom: 1px solid var(--border); 
-            padding: 0 20px; 
-            height: 40px; 
-            display: flex; 
-            align-items: center; 
-            gap: 20px; 
-            font-size: 13px; 
-            font-weight: 600; 
-            flex-shrink: 0; 
-        }
-        .nav-link { 
-            text-decoration: none; 
-            color: var(--text-sub); 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            padding: 4px 8px; 
-            border-radius: 4px; 
-            transition: 0.2s; 
-            white-space: nowrap; /* 글자 줄바꿈 방지 */
-        }
+        /* [2] Navigation */
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+        .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; white-space: nowrap; }
         .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
         .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
 
-        /* [3] 레이아웃 구조 */
-        .workspace { 
-            display: flex; 
-            flex: 1; 
-            overflow: hidden; 
-            height: calc(100vh - 40px - 40px); /* 상단바 40px + 푸터 40px 제외 */
-        }
-
-        /* 왼쪽 사이드바 (도구 목록) */
-        .sidebar { 
-            width: 260px; 
-            background: var(--bg-panel); 
-            border-right: 1px solid var(--border); 
-            display: flex; 
-            flex-direction: column; 
-            overflow-y: auto; 
-            flex-shrink: 0;
-        }
+        /* [3] Layout */
+        .workspace { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 40px - 40px); }
+        .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
         .sidebar-header { padding: 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
         .category-label { padding: 15px 20px 5px; font-size: 11px; font-weight: bold; color: #60a5fa; text-transform: uppercase; }
         .tool-btn { padding: 8px 20px; cursor: pointer; font-size: 13px; color: var(--text-main); border-left: 3px solid transparent; transition: 0.2s; }
         .tool-btn:hover { background: rgba(255,255,255,0.05); color: white; }
         .tool-btn.active { background: rgba(37, 99, 235, 0.1); border-left-color: var(--primary); color: white; font-weight: 600; }
 
-        /* 오른쪽 메인 패널 */
-        .main-panel { 
-            flex: 1; 
-            padding: 30px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
-            max-width: 1000px; 
-            margin: 0 auto; 
-            width: 100%; 
-        }
-
+        .main-panel { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; max-width: 1000px; margin: 0 auto; width: 100%; }
         .config-box { background: var(--bg-panel); padding: 20px; border-radius: 6px; border: 1px solid var(--border); }
         .config-title { margin: 0 0 20px 0; color: white; font-size: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 
-        /* 입력 폼 스타일 */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; color: var(--text-sub); margin-bottom: 6px; font-size: 12px; }
         .input-group input, .input-group textarea, .input-group select { width: 100%; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         .input-group textarea { height: 70px; resize: vertical; font-family: inherit; }
         .input-group input:focus, .input-group textarea:focus, .input-group select:focus { outline: 1px solid var(--primary); border-color: var(--primary); }
 
-        .preview-box { background: white; color: #333; padding: 30px; border-radius: 6px; min-height: 120px; border: 1px solid #d1d5db; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .preview-box { background: white; color: #333; padding: 40px; border-radius: 6px; min-height: 150px; border: 1px solid #d1d5db; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-x: auto; }
         .code-box { width: 100%; height: 120px; background: #111827; color: #e5e7eb; border: 1px solid var(--border); padding: 15px; border-radius: 6px; font-family: 'Menlo', 'Monaco', monospace; resize: none; box-sizing: border-box; font-size: 12px; line-height: 1.5; }
         .code-wrapper { position: relative; }
         .copy-btn { position: absolute; top: 10px; right: 10px; background: #16a34a; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         .copy-btn:hover { background: #15803d; }
         .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
 
-        /* [4] 모바일 최적화 (여기가 핵심!) */
+        /* [4] Mobile Optimization */
         @media (max-width: 768px) { 
-            body { 
-                height: auto; 
-                overflow-y: auto; /* 모바일은 전체 스크롤 허용 */
-            }
-            .nav-bar {
-                height: auto;       /* 높이 자동 조절 */
-                flex-wrap: wrap;    /* 줄바꿈 허용 */
-                padding: 10px;
-                gap: 10px;
-                justify-content: center; /* 가운데 정렬 */
-            }
-            .nav-link {
-                background: #1f2937; /* 버튼처럼 보이게 배경 추가 */
-                padding: 8px 12px;
-                margin: 0;
-                font-size: 12px;
-                flex: 1 1 auto; /* 너비 자동 조절 */
-                justify-content: center;
-            }
-            .workspace { 
-                flex-direction: column; 
-                height: auto; 
-                overflow: visible;
-                padding-bottom: 80px; /* 푸터 공간 확보 */
-            } 
-            .sidebar { 
-                width: 100%; 
-                max-height: 200px; /* 도구 목록 너무 길지 않게 제한 */
-                border-right: none;
-                border-bottom: 2px solid var(--border);
-            } 
-            .main-panel {
-                padding: 15px;
-                width: 100%;
-                box-sizing: border-box;
-            }
+            body { height: auto; overflow-y: auto; }
+            .nav-bar { height: auto; flex-wrap: wrap; padding: 10px; gap: 10px; justify-content: center; }
+            .nav-link { background: #1f2937; padding: 8px 12px; margin: 0; font-size: 12px; flex: 1 1 auto; justify-content: center; }
+            .workspace { flex-direction: column; height: auto; overflow: visible; padding-bottom: 80px; } 
+            .sidebar { width: 100%; max-height: 200px; border-right: none; border-bottom: 2px solid var(--border); } 
+            .main-panel { padding: 15px; width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
@@ -165,11 +77,10 @@
         </div>
 
         <div class="main-panel">
-            
             <div style="background: var(--bg-panel); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                 <h4 style="margin: 0 0 10px 0; color: #60a5fa; font-size: 14px;">🚀 How to use in WordPress</h4>
                 <ol style="margin: 0; padding-left: 20px; color: var(--text-sub); font-size: 13px; line-height: 1.6;">
-                    <li>Select a tool and customize settings.</li>
+                    <li>Select a tool and <strong>customize every detail</strong> below.</li>
                     <li>Click <strong>Copy Code</strong>.</li>
                     <li>Paste into WordPress <strong>"Custom HTML"</strong> block.</li>
                 </ol>
@@ -212,19 +123,38 @@
     </footer>
 
     <script>
+        /* * 👨‍🍳 CHEF'S SPECIAL: FULLY CUSTOMIZABLE TOOLS LIST
+         * Added detailed options for: Size, Shape, Shadow, Alignment, Colors
+         */
         const tools = [
             // --- 1. MONEY MAKERS ---
+            {
+                id: 'cta-btn', category: '💰 Monetization', name: 'Ultimate CTA Button',
+                inputs: [
+                    { id: 'text', label: 'Button Text', type: 'text', val: 'Get Started Now' },
+                    { id: 'link', label: 'Target Link', type: 'text', val: 'https://your-link.com' },
+                    { id: 'color', label: 'Color Theme', type: 'select', options: {'#ef4444':'Red (Urgent)', '#2563eb':'Blue (Trust)', '#16a34a':'Green (Success)', '#f59e0b':'Orange (Warning)', '#000000':'Black (Modern)'} },
+                    { id: 'size', label: 'Size', type: 'select', options: {'12px 25px':'Small', '15px 40px':'Medium (Standard)', '20px 50px':'Large (Big Impact)'} },
+                    { id: 'shape', label: 'Shape', type: 'select', options: {'50px':'Pill (💊)', '8px':'Rounded (🔲)', '0px':'Square (⬛)'} },
+                    { id: 'shadow', label: 'Shadow Effect', type: 'select', options: {'none':'Flat (No Shadow)', '0 4px 6px rgba(0,0,0,0.1)':'Soft Shadow', '0 10px 15px rgba(0,0,0,0.2)':'Deep Shadow'} },
+                    { id: 'width', label: 'Width', type: 'select', options: {'inline-block':'Auto Width (Text fits)', 'block':'Full Width (100%)'} }
+                ],
+                template: (d) => `<div style="text-align:center; margin:30px 0;"><a href="${d.link}" target="_blank" style="display:${d.width}; width:${d.width === 'block' ? '100%' : 'auto'}; box-sizing:border-box; background:${d.color}; color:white; padding:${d.size}; text-decoration:none; font-weight:bold; font-size:18px; border-radius:${d.shape}; box-shadow:${d.shadow}; transition: transform 0.2s;">${d.text} ➤</a></div>`
+            },
             {
                 id: 'affiliate-box', category: '💰 Monetization', name: 'Product Box (Amazon Style)',
                 inputs: [
                     { id: 'title', label: 'Product Name', type: 'text', val: 'Sony WH-1000XM5 Headphones' },
                     { id: 'img', label: 'Image URL', type: 'text', placeholder: 'https://example.com/image.jpg' },
                     { id: 'desc', label: 'Key Features (Line separated)', type: 'textarea', val: 'Noise Cancelling\n30-hour Battery\nUltra Comfortable' },
-                    { id: 'link', label: 'Affiliate Link (Insert your link)', type: 'text', val: 'https://amzn.to/example' }
+                    { id: 'link', label: 'Affiliate Link', type: 'text', val: 'https://amzn.to/example' },
+                    { id: 'btnColor', label: 'Button Color', type: 'select', options: {'#ff9900':'Amazon Orange', '#2563eb':'Blue', '#000000':'Black'} },
+                    { id: 'layout', label: 'Layout', type: 'select', options: {'row':'Horizontal (Side-by-side)', 'column':'Vertical (Stacked)'} }
                 ],
                 template: (d) => {
                     const feats = d.desc.split('\n').map(t=>`<li>${t}</li>`).join('');
-                    return `<div style="border:1px solid #ddd; padding:20px; border-radius:8px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; background:white; margin:20px 0;"><div style="flex:1; min-width:150px; text-align:center;"><img src="${d.img||'https://via.placeholder.com/150'}" style="max-width:100%; border-radius:8px;"></div><div style="flex:2; min-width:250px;"><h3 style="margin:0 0 10px 0;">${d.title}</h3><ul style="color:#555; padding-left:20px; margin-bottom:15px;">${feats}</ul><a href="${d.link}" target="_blank" style="display:inline-block; background:#ff9900; color:black; padding:10px 25px; text-decoration:none; font-weight:bold; border-radius:5px;">Buy Now on Amazon ➤</a></div></div>`;
+                    const isVertical = d.layout === 'column';
+                    return `<div style="border:1px solid #ddd; padding:20px; border-radius:8px; display:flex; flex-direction:${d.layout}; flex-wrap:wrap; gap:20px; align-items:center; background:white; margin:20px 0; text-align:${isVertical ? 'center' : 'left'};"><div style="flex:1; min-width:150px; text-align:center;"><img src="${d.img||'https://via.placeholder.com/150'}" style="max-width:100%; border-radius:8px; height:auto;"></div><div style="flex:2; min-width:250px;"><h3 style="margin:0 0 10px 0;">${d.title}</h3><ul style="color:#555; padding-left:20px; margin-bottom:15px; text-align:left; display:inline-block;">${feats}</ul><br><a href="${d.link}" target="_blank" style="display:inline-block; background:${d.btnColor}; color:${d.btnColor==='#ff9900'?'black':'white'}; padding:10px 25px; text-decoration:none; font-weight:bold; border-radius:5px;">Buy Now ➤</a></div></div>`;
                 }
             },
             {
@@ -232,36 +162,83 @@
                 inputs: [
                     { id: 'plan', label: 'Plan Name', type: 'text', val: 'Pro Plan' },
                     { id: 'price', label: 'Price', type: 'text', val: '$29' },
-                    { id: 'features', label: 'Features (Line separated)', type: 'textarea', val: 'Unlimited Access\n24/7 Support' },
-                    { id: 'link', label: 'Purchase Link', type: 'text', val: 'https://your-checkout-page.com' }
+                    { id: 'features', label: 'Features (Line separated)', type: 'textarea', val: 'Unlimited Access\n24/7 Support\nFree Updates' },
+                    { id: 'link', label: 'Purchase Link', type: 'text', val: 'https://your-checkout-page.com' },
+                    { id: 'highlight', label: 'Highlight Color', type: 'select', options: {'#2563eb':'Blue', '#10b981':'Green', '#ef4444':'Red', '#8b5cf6':'Purple'} }
                 ],
-                template: (d) => `<div style="border:1px solid #ddd; border-radius:10px; padding:30px; text-align:center; max-width:300px; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.05); background:white;"><h3 style="margin:0; color:#333;">${d.plan}</h3><div style="font-size:36px; font-weight:bold; color:#2563eb; margin:15px 0;">${d.price}</div><ul style="list-style:none; padding:0; margin:20px 0;">${d.features.split('\n').map(t=>`<li style="margin-bottom:8px;">✔️ ${t}</li>`).join('')}</ul><a href="${d.link}" style="display:block; background:#2563eb; color:white; padding:12px; border-radius:6px; text-decoration:none; font-weight:bold;">Choose Plan</a></div>`
+                template: (d) => `<div style="border:2px solid ${d.highlight}; border-radius:10px; padding:30px; text-align:center; max-width:300px; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.05); background:white;"><h3 style="margin:0; color:#333;">${d.plan}</h3><div style="font-size:36px; font-weight:bold; color:${d.highlight}; margin:15px 0;">${d.price}</div><ul style="list-style:none; padding:0; margin:20px 0;">${d.features.split('\n').map(t=>`<li style="margin-bottom:8px;">✔️ ${t}</li>`).join('')}</ul><a href="${d.link}" style="display:block; background:${d.highlight}; color:white; padding:12px; border-radius:6px; text-decoration:none; font-weight:bold;">Choose Plan</a></div>`
             },
             {
                 id: 'pros-cons', category: '💰 Monetization', name: 'Pros & Cons Box',
                 inputs: [
-                    { id: 'pros', label: 'Pros (Line separated)', type: 'textarea', val: 'Fast Shipping\nGood Quality' },
-                    { id: 'cons', label: 'Cons (Line separated)', type: 'textarea', val: 'Expensive' }
+                    { id: 'style', label: 'Style', type: 'select', options: {'classic':'Classic (Red/Green)', 'minimal':'Minimal (Black/White)'} },
+                    { id: 'pros', label: 'Pros', type: 'textarea', val: 'Fast Shipping\nGood Quality' },
+                    { id: 'cons', label: 'Cons', type: 'textarea', val: 'Expensive' }
                 ],
-                template: (d) => `<div style="display:flex; gap:15px; flex-wrap:wrap; margin:20px 0;"><div style="flex:1; min-width:250px; background:#f0fdf4; border:1px solid #bbf7d0; padding:15px; border-radius:6px;"><h4 style="margin:0 0 10px 0; color:#166534;">👍 Pros</h4><ul style="margin:0; padding-left:20px; color:#14532d;">${d.pros.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div><div style="flex:1; min-width:250px; background:#fef2f2; border:1px solid #fecaca; padding:15px; border-radius:6px;"><h4 style="margin:0 0 10px 0; color:#991b1b;">👎 Cons</h4><ul style="margin:0; padding-left:20px; color:#7f1d1d;">${d.cons.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div></div>`
+                template: (d) => {
+                    const isClassic = d.style === 'classic';
+                    const greenBg = isClassic ? '#f0fdf4' : '#f9fafb';
+                    const greenBorder = isClassic ? '#bbf7d0' : '#e5e7eb';
+                    const redBg = isClassic ? '#fef2f2' : '#f9fafb';
+                    const redBorder = isClassic ? '#fecaca' : '#e5e7eb';
+                    return `<div style="display:flex; gap:15px; flex-wrap:wrap; margin:20px 0;"><div style="flex:1; min-width:250px; background:${greenBg}; border:1px solid ${greenBorder}; padding:20px; border-radius:8px;"><h4 style="margin:0 0 10px 0; color:${isClassic?'#166534':'#333'};">👍 Pros</h4><ul style="margin:0; padding-left:20px;">${d.pros.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div><div style="flex:1; min-width:250px; background:${redBg}; border:1px solid ${redBorder}; padding:20px; border-radius:8px;"><h4 style="margin:0 0 10px 0; color:${isClassic?'#991b1b':'#333'};">👎 Cons</h4><ul style="margin:0; padding-left:20px;">${d.cons.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div></div>`;
+                }
             },
             {
                 id: 'coupon-box', category: '💰 Monetization', name: 'Coupon Box',
-                inputs: [{ id: 'code', label: 'Code', type: 'text', val: 'SALE2025' }, { id: 'desc', label: 'Description', type: 'text', val: 'Get 20% OFF' }],
-                template: (d) => `<div style="border:2px dashed #3b82f6; background:#eff6ff; padding:20px; text-align:center; border-radius:8px; margin:20px 0;"><p style="margin:0 0 10px 0; color:#1e40af; font-weight:bold;">${d.desc}</p><span style="font-size:24px; font-weight:bold; color:#1d4ed8; background:white; padding:8px 20px; border:1px solid #bfdbfe; border-radius:4px; display:inline-block;">${d.code}</span></div>`
-            },
-            {
-                id: 'cta-btn', category: '💰 Monetization', name: 'CTA Button',
-                inputs: [{ id: 'text', label: 'Text', type: 'text', val: 'Click Here' }, { id: 'link', label: 'Target Link', type: 'text', val: 'https://your-link.com' }, { id: 'color', label: 'Color', type: 'select', options: {'#ef4444':'Red', '#3b82f6':'Blue', '#10b981':'Green'} }],
-                template: (d) => `<div style="text-align:center; margin:30px 0;"><a href="${d.link}" style="background:${d.color}; color:white; padding:15px 40px; text-decoration:none; font-weight:bold; font-size:18px; border-radius:50px; display:inline-block;">${d.text} ➤</a></div>`
-            },
-            {
-                id: 'comparison', category: '💰 Monetization', name: 'Comparison Table (A vs B)',
-                inputs: [{ id: 'prodA', label: 'Product A', type: 'text', val: 'iPhone 15' }, { id: 'prodB', label: 'Product B', type: 'text', val: 'Galaxy S24' }],
-                template: (d) => `<table style="width:100%; border-collapse:collapse; margin:20px 0; text-align:center;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px; border:1px solid #ddd;">Feature</th><th style="padding:10px; border:1px solid #ddd; color:#2563eb;">${d.prodA}</th><th style="padding:10px; border:1px solid #ddd; color:#2563eb;">${d.prodB}</th></tr></thead><tbody><tr><td style="padding:10px; border:1px solid #ddd;">Price</td><td style="padding:10px; border:1px solid #ddd;">$799</td><td style="padding:10px; border:1px solid #ddd;">$799</td></tr><tr><td style="padding:10px; border:1px solid #ddd;">Battery</td><td style="padding:10px; border:1px solid #ddd;">20h</td><td style="padding:10px; border:1px solid #ddd;">22h</td></tr></tbody></table>`
+                inputs: [
+                    { id: 'code', label: 'Code', type: 'text', val: 'SALE2025' }, 
+                    { id: 'desc', label: 'Description', type: 'text', val: 'Get 20% OFF' },
+                    { id: 'style', label: 'Border Style', type: 'select', options: {'dashed':'Dashed (- - -)', 'solid':'Solid (___)', 'dotted':'Dotted (.....)'} }
+                ],
+                template: (d) => `<div style="border:2px ${d.style} #3b82f6; background:#eff6ff; padding:20px; text-align:center; border-radius:8px; margin:20px 0;"><p style="margin:0 0 10px 0; color:#1e40af; font-weight:bold;">${d.desc}</p><span style="font-size:24px; font-weight:bold; color:#1d4ed8; background:white; padding:8px 20px; border:1px solid #bfdbfe; border-radius:4px; display:inline-block;">${d.code}</span></div>`
             },
 
-            // --- 2. STRUCTURE & LAYOUT ---
+            // --- 2. DESIGN & UI ---
+            {
+                id: 'alert-box', category: '🎨 Design & UI', name: 'Alert / Info Box',
+                inputs: [
+                    { id: 'type', label: 'Type', type: 'select', options: {'#eff6ff,#1e40af':'ℹ️ Info (Blue)', '#f0fdf4,#15803d':'✅ Success (Green)', '#fef2f2,#b91c1c':'⚠️ Warning (Red)', '#fffbeb,#b45309':'💡 Tip (Yellow)'} }, 
+                    { id: 'style', label: 'Design Style', type: 'select', options: {'left-border':'Left Border Only', 'full-border':'Full Border', 'solid':'Solid Fill'} },
+                    { id: 'txt', label: 'Message', type: 'textarea', val: 'This is an important note for your readers.' }
+                ],
+                template: (d) => { 
+                    const [bg, color] = d.type.split(','); 
+                    let style = `background:${bg}; color:${color}; padding:15px; border-radius:4px; margin:20px 0;`;
+                    if (d.style === 'left-border') style += ` border-left:5px solid ${color};`;
+                    if (d.style === 'full-border') style += ` border:1px solid ${color};`;
+                    return `<div style="${style}">${d.txt}</div>` 
+                }
+            },
+            {
+                id: 'divider', category: '🎨 Design & UI', name: 'Styled Divider',
+                inputs: [
+                    { id: 's', label: 'Style', type: 'select', options: {'dashed':'Dashed (- - -)', 'dotted':'Dotted (.....)', 'double':'Double (====)', 'solid':'Solid (____)'} },
+                    { id: 'w', label: 'Width', type: 'select', options: {'100%':'Full Width', '50%':'Half Width', '25%':'Small Center'} },
+                    { id: 'c', label: 'Color', type: 'select', options: {'#ccc':'Gray', '#333':'Black', '#2563eb':'Blue', '#ef4444':'Red'} }
+                ],
+                template: (d) => `<hr style="width:${d.w}; border:0; border-top:3px ${d.s} ${d.c}; margin:40px auto;">`
+            },
+            {
+                id: 'highlight', category: '🎨 Design & UI', name: 'Highlight Marker',
+                inputs: [
+                    { id: 'txt', label: 'Text', type: 'text', val: 'Important Text' },
+                    { id: 'color', label: 'Color', type: 'select', options: {'#fde047':'Yellow', '#86efac':'Green', '#93c5fd':'Blue', '#fca5a5':'Red'} }
+                ],
+                template: (d) => `<span style="background:linear-gradient(to top, ${d.color} 50%, transparent 50%); font-weight:bold; padding:0 4px;">${d.txt}</span>`
+            },
+            {
+                id: 'quote', category: '🎨 Design & UI', name: 'Modern Blockquote',
+                inputs: [{ id: 'q', label: 'Quote', type: 'textarea', val: 'Simplicity is the ultimate sophistication.' }, { id: 'a', label: 'Author', type: 'text', val: 'Leonardo da Vinci' }],
+                template: (d) => `<blockquote style="border-left:5px solid #333; margin:20px 0; padding-left:20px; font-style:italic; font-size:18px; color:#555;">"${d.q}"<br><strong style="font-size:14px; color:#333; margin-top:10px; display:block;">— ${d.a}</strong></blockquote>`
+            },
+            {
+                id: 'glass-card', category: '🎨 Design & UI', name: 'Glassmorphism Card',
+                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Modern Design' }],
+                template: (d) => `<div style="background: rgba(255, 255, 255, 0.25); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); backdrop-filter: blur(4px); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.18); padding:30px; text-align:center; margin:20px 0;"><h3>${d.txt}</h3></div>`
+            },
+
+            // --- 3. STRUCTURE & LAYOUT ---
             {
                 id: 'faq', category: '🧱 Structure', name: 'FAQ Accordion',
                 inputs: [{ id: 'q', label: 'Question', type: 'text', val: 'Is it refundable?' }, { id: 'a', label: 'Answer', type: 'textarea', val: 'Yes, within 30 days.' }],
@@ -269,7 +246,7 @@
             },
             {
                 id: 'toc', category: '🧱 Structure', name: 'Table of Contents',
-                inputs: [{ id: 'title', label: 'Title', type: 'text', val: 'Table of Contents' }],
+                inputs: [{ id: 'title', label: 'Title', type: 'text', val: 'Contents' }],
                 template: (d) => `<div style="background:#f9fafb; padding:20px; border-radius:8px; border:1px solid #e5e7eb; display:inline-block;"><h4 style="margin:0 0 10px 0;">${d.title}</h4><ul style="margin:0; padding-left:20px;"><li><a href="#1">Introduction</a></li><li><a href="#2">Main Point</a></li><li><a href="#3">Conclusion</a></li></ul></div>`
             },
             {
@@ -287,13 +264,8 @@
                 inputs: [{ id: 'h1', label: 'Head 1', type: 'text', val: 'Item' }, { id: 'h2', label: 'Head 2', type: 'text', val: 'Cost' }],
                 template: (d) => `<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; min-width:400px;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px; border:1px solid #ddd;">${d.h1}</th><th style="padding:10px; border:1px solid #ddd;">${d.h2}</th></tr></thead><tbody><tr><td style="padding:10px; border:1px solid #ddd;">A</td><td style="padding:10px; border:1px solid #ddd;">$10</td></tr></tbody></table></div>`
             },
-            {
-                id: 'step-box', category: '🧱 Structure', name: 'Step Box',
-                inputs: [{ id: 'num', label: 'Number', type: 'text', val: '01' }, { id: 'title', label: 'Title', type: 'text', val: 'Sign Up' }, { id: 'desc', label: 'Desc', type: 'textarea', val: 'Go to settings.' }],
-                template: (d) => `<div style="display:flex; gap:15px; margin:20px 0;"><div style="background:#2563eb; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:bold;">${d.num}</div><div><h4 style="margin:0;">${d.title}</h4><p style="margin:5px 0 0 0; color:#666;">${d.desc}</p></div></div>`
-            },
 
-            // --- 3. SOCIAL & MEDIA ---
+            // --- 4. SOCIAL & MEDIA ---
             {
                 id: 'link-bio', category: '📢 Social & Media', name: 'Link In Bio Card',
                 inputs: [{ id: 'name', label: 'Name', type: 'text', val: '@MyName' }, { id: 'bio', label: 'Bio', type: 'text', val: 'Check my links below' }],
@@ -303,11 +275,6 @@
                 id: 'review-box', category: '📢 Social & Media', name: 'Review / Testimonial',
                 inputs: [{ id: 'name', label: 'Name', type: 'text', val: 'John Doe' }, { id: 'text', label: 'Review', type: 'textarea', val: 'Amazing service!' }],
                 template: (d) => `<div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; text-align:center;"><div style="font-size:20px; margin-bottom:10px;">⭐⭐⭐⭐⭐</div><p style="font-style:italic;">"${d.text}"</p><strong>- ${d.name}</strong></div>`
-            },
-            {
-                id: 'click-tweet', category: '📢 Social & Media', name: 'Click to Tweet',
-                inputs: [{ id: 'q', label: 'Quote', type: 'text', val: 'This is awesome!' }],
-                template: (d) => `<div style="border:2px solid #1da1f2; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><span>"${d.q}"</span><a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(d.q)}" target="_blank" style="background:#1da1f2; color:white; padding:8px 15px; border-radius:20px; text-decoration:none; font-size:12px; font-weight:bold; white-space:nowrap;">Tweet 🐦</a></div>`
             },
             {
                 id: 'youtube', category: '📢 Social & Media', name: 'Responsive YouTube',
@@ -320,46 +287,9 @@
                 template: (d) => `<div style="width:100%; position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px;"><iframe src="${d.url}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe></div>`
             },
             {
-                id: 'author', category: '📢 Social & Media', name: 'Author Box',
-                inputs: [{ id: 'name', label: 'Name', type: 'text', val: 'Author Name' }, { id: 'bio', label: 'Bio', type: 'textarea', val: 'I write about tech.' }],
-                template: (d) => `<div style="display:flex; gap:15px; background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; align-items:center;"><div style="width:60px; height:60px; background:#ddd; border-radius:50%;"></div><div><h4 style="margin:0;">${d.name}</h4><p style="margin:5px 0 0 0; font-size:14px; color:#666;">${d.bio}</p></div></div>`
-            },
-            {
                 id: 'social-share', category: '📢 Social & Media', name: 'Social Links',
                 inputs: [{ id: 'txt', label: 'Label', type: 'text', val: 'Share:' }],
                 template: (d) => `<div style="text-align:center; margin:20px 0;"><p style="margin-bottom:10px; color:#666;">${d.txt}</p><a href="#" style="padding:8px 15px; background:#3b5998; color:white; text-decoration:none; border-radius:4px; margin:5px;">FB</a><a href="#" style="padding:8px 15px; background:#1da1f2; color:white; text-decoration:none; border-radius:4px; margin:5px;">TW</a></div>`
-            },
-
-            // --- 4. DESIGN & UI ---
-            {
-                id: 'glass-card', category: '🎨 Design & UI', name: 'Glassmorphism Card',
-                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Modern Design' }],
-                template: (d) => `<div style="background: rgba(255, 255, 255, 0.25); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); backdrop-filter: blur(4px); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.18); padding:30px; text-align:center; margin:20px 0;"><h3>${d.txt}</h3></div>`
-            },
-            {
-                id: 'alert-box', category: '🎨 Design & UI', name: 'Alert / Info Box',
-                inputs: [{ id: 'type', label: 'Color', type: 'select', options: {'#eff6ff,#1e40af':'Blue', '#f0fdf4,#15803d':'Green', '#fef2f2,#b91c1c':'Red'} }, { id: 'txt', label: 'Text', type: 'textarea', val: 'Notice here.' }],
-                template: (d) => { const c = d.type.split(','); return `<div style="background:${c[0]}; color:${c[1]}; padding:15px; border-left:5px solid ${c[1]}; border-radius:4px; margin:20px 0;">${d.txt}</div>` }
-            },
-            {
-                id: 'gradient-text', category: '🎨 Design & UI', name: 'Gradient Headline',
-                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Amazing Title' }],
-                template: (d) => `<h2 style="background:linear-gradient(45deg, #f3ec78, #af4261); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:inline-block;">${d.txt}</h2>`
-            },
-            {
-                id: 'highlight', category: '🎨 Design & UI', name: 'Highlight Marker',
-                inputs: [{ id: 'txt', label: 'Text', type: 'text', val: 'Important' }],
-                template: (d) => `<span style="background:linear-gradient(to top, #fde047 50%, transparent 50%); font-weight:bold; padding:0 4px;">${d.txt}</span>`
-            },
-            {
-                id: 'divider', category: '🎨 Design & UI', name: 'Styled Divider',
-                inputs: [{ id: 's', label: 'Style', type: 'select', options: {'dashed':'Dashed', 'dotted':'Dotted', 'double':'Double'} }],
-                template: (d) => `<hr style="width:100%; border:0; border-top:3px ${d.s} #ccc; margin:40px 0;">`
-            },
-            {
-                id: 'quote', category: '🎨 Design & UI', name: 'Modern Quote',
-                inputs: [{ id: 'q', label: 'Quote', type: 'textarea', val: 'Be yourself.' }, { id: 'a', label: 'Author', type: 'text', val: 'Oscar Wilde' }],
-                template: (d) => `<blockquote style="border-left:5px solid #333; margin:20px 0; padding-left:20px; font-style:italic; font-size:18px; color:#555;">"${d.q}"<br><strong style="font-size:14px; color:#333;">— ${d.a}</strong></blockquote>`
             }
         ];
 
