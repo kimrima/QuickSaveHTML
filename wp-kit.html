@@ -6,219 +6,51 @@
     <title>WP Ultimate Kit - QuickSaveHTML</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [1] 디자인 통일: Index.html과 똑같은 색상 변수 사용 */
+        /* [1] Design Variables (Matched with Index.html) */
         :root {
-            --primary: #2563eb;       /* 메인 파란색 */
-            --bg-dark: #111827;       /* 전체 배경 (남색 톤) */
-            --bg-panel: #1f2937;      /* 패널/사이드바 배경 */
-            --text-main: #f3f4f6;     /* 하얀 글자 */
-            --text-sub: #9ca3af;      /* 회색 글자 */
-            --border: #374151;        /* 테두리 선 */
+            --primary: #2563eb;
+            --bg-dark: #111827;
+            --bg-panel: #1f2937;
+            --text-main: #f3f4f6;
+            --text-sub: #9ca3af;
+            --border: #374151;
         }
         
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        /* [2] 상단 네비게이션: Index.html 스타일과 100% 일치 */
-        .nav-bar {
-            background: #0f172a;
-            border-bottom: 1px solid var(--border);
-            padding: 0 20px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-sub);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: 0.2s;
-        }
-        .nav-link:hover {
-            color: white;
-            background: rgba(255,255,255,0.1);
-        }
-        .nav-link.active {
-            color: #60a5fa;
-            background: rgba(37, 99, 235, 0.1); /* 파란색 박스 효과 */
-        }
+        /* [2] Navigation */
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+        .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+        .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
 
-        /* [3] 레이아웃 */
-        .workspace {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            height: calc(100vh - 40px - 40px); /* 상단바 40px + 푸터 40px 제외 */
-        }
+        /* [3] Layout */
+        .workspace { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 40px - 40px); }
+        .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar-header { padding: 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+        .category-label { padding: 15px 20px 5px; font-size: 11px; font-weight: bold; color: #60a5fa; text-transform: uppercase; }
+        .tool-btn { padding: 8px 20px; cursor: pointer; font-size: 13px; color: var(--text-main); border-left: 3px solid transparent; transition: 0.2s; }
+        .tool-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+        .tool-btn.active { background: rgba(37, 99, 235, 0.1); border-left-color: var(--primary); color: white; font-weight: 600; }
 
-        /* 왼쪽 사이드바 */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-panel);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        .sidebar-header {
-            padding: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--border);
-        }
-        .category-label {
-            padding: 15px 20px 5px;
-            font-size: 11px;
-            font-weight: bold;
-            color: #60a5fa; /* 메인 테마색 */
-            text-transform: uppercase;
-        }
-        .tool-btn {
-            padding: 8px 20px;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text-main);
-            border-left: 3px solid transparent;
-            transition: 0.2s;
-        }
-        .tool-btn:hover {
-            background: rgba(255,255,255,0.05);
-            color: white;
-        }
-        .tool-btn.active {
-            background: rgba(37, 99, 235, 0.1);
-            border-left-color: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
+        .main-panel { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .config-box { background: var(--bg-panel); padding: 20px; border-radius: 6px; border: 1px solid var(--border); }
+        .config-title { margin: 0 0 20px 0; color: white; font-size: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 
-        /* 오른쪽 메인 패널 */
-        .main-panel {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* 설정 박스 */
-        .config-box {
-            background: var(--bg-panel);
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-        }
-        .config-title {
-            margin: 0 0 20px 0;
-            color: white;
-            font-size: 18px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        /* 입력 폼 스타일 */
         .input-group { margin-bottom: 15px; }
-        .input-group label {
-            display: block;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-            font-size: 12px;
-        }
-        .input-group input, .input-group textarea, .input-group select {
-            width: 100%;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 8px 12px;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 13px;
-        }
+        .input-group label { display: block; color: var(--text-sub); margin-bottom: 6px; font-size: 12px; }
+        .input-group input, .input-group textarea, .input-group select { width: 100%; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         .input-group textarea { height: 70px; resize: vertical; font-family: inherit; }
-        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
-            outline: 1px solid var(--primary);
-            border-color: var(--primary);
-        }
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus { outline: 1px solid var(--primary); border-color: var(--primary); }
 
-        /* 미리보기 & 코드 박스 */
-        .section-label {
-            color: var(--text-sub);
-            font-size: 12px;
-            margin-bottom: 8px;
-            display: block;
-            font-weight: 600;
-        }
-        .preview-box {
-            background: white;
-            color: #333;
-            padding: 30px;
-            border-radius: 6px;
-            min-height: 120px;
-            border: 1px solid #d1d5db;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .code-box {
-            width: 100%;
-            height: 120px;
-            background: #111827; /* 에디터와 동일한 배경색 */
-            color: #e5e7eb;
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Menlo', 'Monaco', monospace;
-            resize: none;
-            box-sizing: border-box;
-            font-size: 12px;
-            line-height: 1.5;
-        }
+        .preview-box { background: white; color: #333; padding: 30px; border-radius: 6px; min-height: 120px; border: 1px solid #d1d5db; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .code-box { width: 100%; height: 120px; background: #111827; color: #e5e7eb; border: 1px solid var(--border); padding: 15px; border-radius: 6px; font-family: 'Menlo', 'Monaco', monospace; resize: none; box-sizing: border-box; font-size: 12px; line-height: 1.5; }
         .code-wrapper { position: relative; }
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #16a34a; /* 초록색 버튼 */
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: bold;
-        }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #16a34a; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         .copy-btn:hover { background: #15803d; }
+        .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
 
-        /* 모바일 대응 */
-        @media (max-width: 768px) {
-            .workspace { flex-direction: column; height: auto; padding-bottom: 80px; }
-            .sidebar { width: 100%; max-height: 250px; }
-            .nav-link { margin-right: 15px; }
-        }
+        @media (max-width: 768px) { .workspace { flex-direction: column; height: auto; padding-bottom: 80px; } .sidebar { width: 100%; max-height: 250px; } .nav-link { margin-right: 15px; } }
     </style>
 </head>
 <body>
@@ -237,14 +69,12 @@
         </div>
 
         <div class="main-panel">
-            
             <div style="background: var(--bg-panel); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
                 <h4 style="margin: 0 0 10px 0; color: #60a5fa; font-size: 14px;">🚀 How to use in WordPress</h4>
                 <ol style="margin: 0; padding-left: 20px; color: var(--text-sub); font-size: 13px; line-height: 1.6;">
-                    <li>Select a tool from the left menu.</li>
-                    <li>Customize your settings.</li>
-                    <li>Click <strong>Copy Code</strong> button.</li>
-                    <li>In WordPress, add a <strong>"Custom HTML"</strong> block and paste it.</li>
+                    <li>Select a tool and customize settings. (도구 선택 후 내용 입력)</li>
+                    <li>Click <strong>Copy Code</strong>. (코드 복사)</li>
+                    <li>Paste into WordPress <strong>"Custom HTML"</strong> block. (워드프레스 '사용자 정의 HTML' 블록에 붙여넣기)</li>
                 </ol>
             </div>
 
@@ -254,7 +84,7 @@
             </div>
 
             <div>
-                <span class="section-label">Real-time Preview (Visual Check)</span>
+                <span class="section-label">Real-time Preview</span>
                 <div class="preview-box" id="previewBox">Select a tool...</div>
             </div>
 
@@ -292,8 +122,8 @@
                 inputs: [
                     { id: 'title', label: 'Product Name', type: 'text', val: 'Sony WH-1000XM5 Headphones' },
                     { id: 'img', label: 'Image URL', type: 'text', placeholder: 'https://example.com/image.jpg' },
-                    { id: 'desc', label: 'Key Features', type: 'textarea', val: 'Noise Cancelling\n30-hour Battery\nUltra Comfortable' },
-                    { id: 'link', label: 'Affiliate Link', type: 'text', val: '#' }
+                    { id: 'desc', label: 'Key Features (Line separated)', type: 'textarea', val: 'Noise Cancelling\n30-hour Battery\nUltra Comfortable' },
+                    { id: 'link', label: 'Affiliate Link (Insert your link)', type: 'text', val: 'https://amzn.to/example' }
                 ],
                 template: (d) => {
                     const feats = d.desc.split('\n').map(t=>`<li>${t}</li>`).join('');
@@ -306,15 +136,15 @@
                     { id: 'plan', label: 'Plan Name', type: 'text', val: 'Pro Plan' },
                     { id: 'price', label: 'Price', type: 'text', val: '$29' },
                     { id: 'features', label: 'Features (Line separated)', type: 'textarea', val: 'Unlimited Access\n24/7 Support' },
-                    { id: 'link', label: 'Link', type: 'text', val: '#' }
+                    { id: 'link', label: 'Purchase Link', type: 'text', val: 'https://your-checkout-page.com' }
                 ],
                 template: (d) => `<div style="border:1px solid #ddd; border-radius:10px; padding:30px; text-align:center; max-width:300px; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.05); background:white;"><h3 style="margin:0; color:#333;">${d.plan}</h3><div style="font-size:36px; font-weight:bold; color:#2563eb; margin:15px 0;">${d.price}</div><ul style="list-style:none; padding:0; margin:20px 0;">${d.features.split('\n').map(t=>`<li style="margin-bottom:8px;">✔️ ${t}</li>`).join('')}</ul><a href="${d.link}" style="display:block; background:#2563eb; color:white; padding:12px; border-radius:6px; text-decoration:none; font-weight:bold;">Choose Plan</a></div>`
             },
             {
                 id: 'pros-cons', category: '💰 Monetization', name: 'Pros & Cons Box',
                 inputs: [
-                    { id: 'pros', label: 'Pros', type: 'textarea', val: 'Fast Shipping\nGood Quality' },
-                    { id: 'cons', label: 'Cons', type: 'textarea', val: 'Expensive' }
+                    { id: 'pros', label: 'Pros (Line separated)', type: 'textarea', val: 'Fast Shipping\nGood Quality' },
+                    { id: 'cons', label: 'Cons (Line separated)', type: 'textarea', val: 'Expensive' }
                 ],
                 template: (d) => `<div style="display:flex; gap:15px; flex-wrap:wrap; margin:20px 0;"><div style="flex:1; min-width:250px; background:#f0fdf4; border:1px solid #bbf7d0; padding:15px; border-radius:6px;"><h4 style="margin:0 0 10px 0; color:#166534;">👍 Pros</h4><ul style="margin:0; padding-left:20px; color:#14532d;">${d.pros.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div><div style="flex:1; min-width:250px; background:#fef2f2; border:1px solid #fecaca; padding:15px; border-radius:6px;"><h4 style="margin:0 0 10px 0; color:#991b1b;">👎 Cons</h4><ul style="margin:0; padding-left:20px; color:#7f1d1d;">${d.cons.split('\n').map(t=>`<li>${t}</li>`).join('')}</ul></div></div>`
             },
@@ -325,7 +155,7 @@
             },
             {
                 id: 'cta-btn', category: '💰 Monetization', name: 'CTA Button',
-                inputs: [{ id: 'text', label: 'Text', type: 'text', val: 'Click Here' }, { id: 'link', label: 'Link', type: 'text', val: '#' }, { id: 'color', label: 'Color', type: 'select', options: {'#ef4444':'Red', '#3b82f6':'Blue', '#10b981':'Green'} }],
+                inputs: [{ id: 'text', label: 'Text', type: 'text', val: 'Click Here' }, { id: 'link', label: 'Target Link', type: 'text', val: 'https://your-link.com' }, { id: 'color', label: 'Color', type: 'select', options: {'#ef4444':'Red', '#3b82f6':'Blue', '#10b981':'Green'} }],
                 template: (d) => `<div style="text-align:center; margin:30px 0;"><a href="${d.link}" style="background:${d.color}; color:white; padding:15px 40px; text-decoration:none; font-weight:bold; font-size:18px; border-radius:50px; display:inline-block;">${d.text} ➤</a></div>`
             },
             {
@@ -347,7 +177,7 @@
             },
             {
                 id: 'grid-2col', category: '🧱 Structure', name: '2-Column Grid',
-                inputs: [{ id: 'l', label: 'Left', type: 'textarea', val: 'Text Left' }, { id: 'r', label: 'Right', type: 'textarea', val: 'Text Right' }],
+                inputs: [{ id: 'l', label: 'Left Content', type: 'textarea', val: 'Text Left' }, { id: 'r', label: 'Right Content', type: 'textarea', val: 'Text Right' }],
                 template: (d) => `<div style="display:flex; flex-wrap:wrap; gap:20px; margin:20px 0;"><div style="flex:1; min-width:300px; padding:15px; background:#f9f9f9;">${d.l}</div><div style="flex:1; min-width:300px; padding:15px; background:#f9f9f9;">${d.r}</div></div>`
             },
             {
@@ -380,7 +210,7 @@
             {
                 id: 'click-tweet', category: '📢 Social & Media', name: 'Click to Tweet',
                 inputs: [{ id: 'q', label: 'Quote', type: 'text', val: 'This is awesome!' }],
-                template: (d) => `<div style="border:2px solid #1da1f2; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><span>"${d.q}"</span><a href="#" style="background:#1da1f2; color:white; padding:8px 15px; border-radius:20px; text-decoration:none; font-size:12px; font-weight:bold; white-space:nowrap;">Tweet 🐦</a></div>`
+                template: (d) => `<div style="border:2px solid #1da1f2; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><span>"${d.q}"</span><a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(d.q)}" target="_blank" style="background:#1da1f2; color:white; padding:8px 15px; border-radius:20px; text-decoration:none; font-size:12px; font-weight:bold; white-space:nowrap;">Tweet 🐦</a></div>`
             },
             {
                 id: 'youtube', category: '📢 Social & Media', name: 'Responsive YouTube',
