@@ -36,7 +36,12 @@
         button.secondary-btn { background: #374151; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
         button.secondary-btn:hover { background: #4b5563; }
 
-        .workspace { display: flex; flex: 1; height: calc(100vh - 100px); }
+        .workspace {
+    display: flex;
+    flex: 1; /* 남는 공간을 모두 본문이 차지함 */
+    overflow: hidden; /* 내부 스크롤은 유지 */
+    /* 기존의 height: calc(...) 부분은 지우거나 주석 처리해도 됩니다 */
+}
         .editor-container { width: 50%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
         .pane-header { background: #111827; padding: 8px 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
         textarea { flex: 1; background: #0d1117; color: #e5e7eb; border: none; padding: 15px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
@@ -79,7 +84,7 @@
 
     <script>
         function formatCode() {
-            const input = document.getElementById('inputCode').value;
+            cohttps://github.com/kimrima/QuickSaveHTMLnst input = document.getElementById('inputCode').value;
             if(!input) return alert("Please paste some code first!");
             
             // html_beautify 라이브러리 사용
