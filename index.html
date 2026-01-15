@@ -60,7 +60,12 @@
         button.danger:hover { color: #ef4444; border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
         button.device-btn.active { background: #e5e7eb; color: var(--primary); border-color: #d1d5db; }
 
-        .workspace { display: flex; flex: 1; height: calc(100vh - 120px); position: relative; }
+        .workspace {
+    display: flex;
+    flex: 1; /* 남는 공간을 모두 본문이 차지함 */
+    overflow: hidden; /* 내부 스크롤은 유지 */
+    /* 기존의 height: calc(...) 부분은 지우거나 주석 처리해도 됩니다 */
+}
         .editor-pane { width: 40%; min-width: 200px; display: flex; flex-direction: column; background: var(--bg-dark); }
         .pane-header { padding: 8px 16px; background: var(--bg-panel); font-size: 11px; font-weight: 600; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 30px;}
         textarea { flex: 1; background: transparent; color: #e5e7eb; border: none; padding: 20px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
@@ -182,7 +187,7 @@
         </div>
     </div>
 
-<footer style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: #0d1117; border-top: 1px solid #30363d; padding: 6px 0; z-index: 9999; font-family: sans-serif; line-height: 1.4;">
+<footer style="background-color: #0d1117; border-top: 1px solid #30363d; padding: 10px 0; font-family: sans-serif; line-height: 1.4;">
     
     <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 4px; padding: 0 10px;">
         
