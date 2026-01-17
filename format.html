@@ -2,59 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVHGGEGNY7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-VVHGGEGNY7');
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Formatter & Minifier - QuickSaveHTML</title>
-    <meta name="description" content="Free online HTML Formatter and Minifier. Beautify your ugly code or minify it for production.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
+    <title>Free HTML Formatter & Minifier - Beautify Messy Code Instantly</title>
+    <meta name="description" content="Clean up your messy HTML code with one click. Proper indentation for readability or minify for speed. Best for fixing AI-generated code.">
+    <meta property="og:title" content="Free HTML Formatter & Minifier - Beautify Messy Code Instantly">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     <style>
-        :root { --primary: #2563eb; --bg-dark: #111827; --bg-panel: #1f2937; --text-main: #f3f4f6; --text-sub: #9ca3af; --border: #374151; }
-        body { margin: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
-        
-        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; }
-        .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; }
+        :root {
+            --primary: #2563eb;
+            --bg-dark: #111827;
+            --bg-panel: #1f2937;
+            --text-main: #f3f4f6;
+            --text-sub: #9ca3af;
+            --border: #374151;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: var(--bg-dark); 
+            color: var(--text-main); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+
+        /* Navigation */
+        .nav-bar { background: #0f172a; border-bottom: 1px solid var(--border); padding: 0 20px; height: 40px; display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+        .nav-link { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; white-space: nowrap; }
         .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
         .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
 
-        header { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; justify-content: space-between; }
-        h1 { margin: 0; font-size: 18px; color: #fff; display: flex; align-items: center; gap: 10px; }
-        
-        .action-group { display: flex; gap: 10px; }
-        button.action-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
-        button.action-btn:hover { background: #1d4ed8; }
-        button.secondary-btn { background: #374151; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-        button.secondary-btn:hover { background: #4b5563; }
+        /* Workspace Layout */
+        .workspace { 
+            display: flex; 
+            flex-direction: column;
+            flex: 1; 
+            padding: 20px;
+            overflow-y: auto;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
 
-        .workspace {
-    display: flex;
-    flex: 1; /* 남는 공간을 모두 본문이 차지함 */
-    overflow: hidden; /* 내부 스크롤은 유지 */
-    /* 기존의 height: calc(...) 부분은 지우거나 주석 처리해도 됩니다 */
-}
-        .editor-container { width: 50%; display: flex; flex-direction: column; border-right: 1px solid var(--border); }
-        .pane-header { background: #111827; padding: 8px 15px; font-size: 12px; font-weight: bold; color: var(--text-sub); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
-        textarea { flex: 1; background: #0d1117; color: #e5e7eb; border: none; padding: 15px; resize: none; outline: none; font-family: 'Menlo', 'Monaco', monospace; font-size: 13px; line-height: 1.6; }
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn:hover { background: #374151; }
+        .btn-primary { background: var(--primary); border-color: var(--primary); color: white; font-weight: bold; }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 400px;
+        }
+
+        textarea {
+            flex: 1;
+            background: #0d1117;
+            color: #e6edf3;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Menlo', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: none;
+        }
+        textarea:focus { outline: 1px solid var(--primary); }
+
+        /* Footer Style */
+        footer {
+            background-color: #0d1117; 
+            border-top: 1px solid #30363d; 
+            padding: 10px 0; 
+            font-family: sans-serif; 
+            line-height: 1.4;
+            flex-shrink: 0;
+            z-index: 100;
+        }
 
         @media (max-width: 768px) {
-            .workspace { flex-direction: column; }
-            .editor-container { width: 100%; height: 50%; border-right: none; border-bottom: 1px solid var(--border); }
-            header { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
-            .action-group { width: 100%; justify-content: center; }
+            .nav-bar { height: auto; flex-wrap: wrap; justify-content: center; padding: 10px; }
+            .workspace { padding: 10px; }
+            .tool-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .action-bar { width: 100%; }
+            .btn { flex: 1; justify-content: center; }
         }
     </style>
 </head>
 <body>
+
     <div class="nav-bar">
         <a href="index.html" class="nav-link"><i class="fas fa-code"></i> Editor</a>
         <a href="diff.html" class="nav-link"><i class="fas fa-exchange-alt"></i> Diff Checker</a>
@@ -62,76 +133,114 @@
         <a href="wp-kit.html" class="nav-link"><i class="fas fa-box-open"></i> WP Kit</a>
     </div>
 
-    <header>
-        <h1><i class="fas fa-magic" style="color:#60a5fa;"></i> HTML Code Formatter</h1>
-        <div class="action-group">
-            <button class="action-btn" onclick="formatCode()"><i class="fas fa-align-left"></i> Beautify </button>
-            <button class="secondary-btn" onclick="minifyCode()"><i class="fas fa-compress-arrows-alt"></i> Minify </button>
-            <button class="secondary-btn" onclick="copyResult()"><i class="far fa-copy"></i> Copy</button>
-        </div>
-    </header>
-
     <div class="workspace">
-        <div class="editor-container">
-            <div class="pane-header">Input (Paste dirty code here) <button onclick="clearAll()" style="background:none; border:none; color:#ef4444; cursor:pointer;">Clear</button></div>
-            <textarea id="inputCode" placeholder="Paste your messy HTML/CSS/JS code here..."></textarea>
+        <div class="tool-header">
+            <h2 style="margin:0; font-size:18px;">HTML Formatter & Minifier</h2>
+            <div class="action-bar">
+                <button class="btn btn-primary" onclick="formatCode()"><i class="fas fa-magic"></i> Beautify</button>
+                <button class="btn" onclick="minifyCode()"><i class="fas fa-compress-arrows-alt"></i> Minify</button>
+                <button class="btn" onclick="copyCode()"><i class="far fa-copy"></i> Copy</button>
+                <button class="btn" onclick="clearCode()"><i class="fas fa-trash"></i> Clear</button>
+            </div>
         </div>
-        <div class="editor-container" style="border-right:none;">
-            <div class="pane-header">Output (Clean code result)</div>
-            <textarea id="outputCode" readonly placeholder="Result will appear here..."></textarea>
+
+        <div class="editor-container">
+            <textarea id="codeInput" placeholder="Paste your messy HTML code here..."></textarea>
         </div>
     </div>
 
+    <footer>
+        <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 4px; padding: 0 10px;">
+            <span style="font-size: 11px; color: #8b949e; font-style: italic;">"Focusing on simplicity to solve real-world problems."</span>
+            <span style="color: #30363d; font-size: 10px;">|</span>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="https://unitools.store" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🛠️ UniTools</a>
+                <a href="https://whatsthatthing.net" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🔍 What's That Thing</a>
+                <a href="https://fidnmysite.site" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🌐 FindMySite</a>
+                <a href="https://recipehub.store" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">👨‍🍳 RecipeHub</a>
+            </div>
+        </div>
+        <div style="text-align: center; font-size: 10px; color: #484f58;">
+            <span onclick="openModal('privacyModal')" style="cursor:pointer; margin: 0 6px;">Privacy</span> | <span onclick="openModal('termsModal')" style="cursor:pointer; margin: 0 6px;">Terms</span> | <span style="margin-left: 6px;">© 2026 QuickSaveHTML</span>
+        </div>
+    </footer>
+
     <script>
+        // 💾 LocalStorage Key
+        const STORAGE_KEY = 'wp-format-content';
+
+        // Load saved content on startup
+        window.onload = function() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if(saved) document.getElementById('codeInput').value = saved;
+        }
+
+        // Save content on input
+        document.getElementById('codeInput').addEventListener('input', function() {
+            localStorage.setItem(STORAGE_KEY, this.value);
+        });
+
         function formatCode() {
-            cohttps://github.com/kimrima/QuickSaveHTMLnst input = document.getElementById('inputCode').value;
-            if(!input) return alert("Please paste some code first!");
-            
-            // html_beautify 라이브러리 사용
-            const formatted = html_beautify(input, {
-                "indent_size": 4,
-                "indent_char": " ",
-                "max_preserve_newlines": 1,
-                "preserve_newlines": true,
-                "keep_array_indentation": false,
-                "break_chained_methods": false,
-                "indent_scripts": "normal",
-                "brace_style": "collapse",
-                "space_before_conditional": true,
-                "unescape_strings": false,
-                "jslint_happy": false,
-                "end_with_newline": false,
-                "wrap_line_length": 0,
-                "indent_inner_html": false,
-                "comma_first": false,
-                "e4x": false,
-                "indent_empty_lines": false
-            });
-            
-            document.getElementById('outputCode').value = formatted;
+            const input = document.getElementById('codeInput');
+            const code = input.value;
+            if(!code) return;
+
+            // 🚨 핵심: 외부 라이브러리(html_beautify) 사용
+            if (typeof html_beautify === 'function') {
+                const formatted = html_beautify(code, {
+                    "indent_size": 4,
+                    "indent_char": " ",
+                    "max_preserve_newlines": 1,
+                    "preserve_newlines": true,
+                    "keep_array_indentation": false,
+                    "break_chained_methods": false,
+                    "indent_scripts": "normal",
+                    "brace_style": "collapse",
+                    "space_before_conditional": true,
+                    "unescape_strings": false,
+                    "jslint_happy": false,
+                    "end_with_newline": false,
+                    "wrap_line_length": 0,
+                    "indent_inner_html": false,
+                    "comma_first": false,
+                    "e4x": false,
+                    "indent_empty_lines": false
+                });
+                input.value = formatted;
+                localStorage.setItem(STORAGE_KEY, formatted);
+            } else {
+                alert("Library not loaded. Please refresh the page.");
+            }
         }
 
         function minifyCode() {
-            const input = document.getElementById('inputCode').value;
-            if(!input) return alert("Please paste some code first!");
+            const input = document.getElementById('codeInput');
+            let code = input.value;
+            if(!code) return;
 
-            // 단순 무식하게 줄바꿈과 공백을 제거하는 Minify 로직
-            const minified = input.replace(/\n/g, "").replace(/[\t ]+\</g, "<").replace(/\>[\t ]+\</g, "><").replace(/\>[\t ]+$/g, ">");
-            document.getElementById('outputCode').value = minified;
+            // Simple Minify Logic (Remove extra spaces/newlines)
+            code = code.replace(/\s{2,}/g, ' ')   // 2칸 이상 공백 제거
+                       .replace(/\n/g, '')        // 줄바꿈 제거
+                       .replace(/>\s+</g, '><');  // 태그 사이 공백 제거
+            
+            input.value = code;
+            localStorage.setItem(STORAGE_KEY, code);
         }
 
-        function copyResult() {
-            const output = document.getElementById('outputCode');
-            if(!output.value) return;
-            output.select();
+        function copyCode() {
+            const input = document.getElementById('codeInput');
+            input.select();
             document.execCommand('copy');
-            alert("Code copied to clipboard!");
+            alert("Copied to clipboard!");
         }
 
-        function clearAll() {
-            document.getElementById('inputCode').value = '';
-            document.getElementById('outputCode').value = '';
+        function clearCode() {
+            if(confirm("Are you sure you want to clear?")) {
+                document.getElementById('codeInput').value = '';
+                localStorage.removeItem(STORAGE_KEY);
+            }
         }
+        function openModal(id) { alert("This would open " + id); }
     </script>
 </body>
 </html>
