@@ -245,7 +245,8 @@
     </div>
     <div class="toast" id="toast">Copied!</div>
 
-    <script>
+   <script>
+        /* [1] 기본 변수 설정 */
         const codeInput = document.getElementById('code');
         const previewFrame = document.getElementById('preview');
         const filenameInput = document.getElementById('filename-input');
@@ -253,12 +254,66 @@
         const editorPane = document.getElementById('editorPane');
         const dragOverlay = document.getElementById('dragOverlay');
         const workspace = document.getElementById('workspace');
-        let isManuallyChanged = false; let isResizing = false;
+        
+        // 💾 로컬 스토리지 키 (자동 저장용 금고 열쇠)
+        const STORAGE_KEY = 'quicksave-html-content';
 
+        let isManuallyChanged = false; 
+        let isResizing = false;
+
+        /* [2] 페이지 로드 시: 저장된 내용 불러오기 */
+        window.onload = function() {
+            const savedCode = localStorage.getItem(STORAGE_KEY);
+            
+            if (savedCode) {
+                // 저장된 내용이 있으면 불러오기
+                codeInput.value = savedCode;
+                updatePreview(); 
+                showToast("Auto-saved content loaded!");
+            } else {
+                // 저장된 게 없으면 아무것도 안 하거나, 기본 템플릿을 비워둠
+                // 필요하면 여기서 insertTemplate() 호출 가능
+            }
+        };
+
+        /* [3] 에디터 입력 감지 (입력할 때마다 저장 + 미리보기 갱신) */
+        codeInput.addEventListener('input', () => {
+            updatePreview();
+            
+            // 🔥 핵심: 입력할 때마다 브라우저에 저장
+            localStorage.setItem(STORAGE_KEY, codeInput.value);
+
+            // 파일명 자동 추출 로직
+            if (!isManuallyChanged) {
+                const match = codeInput.value.match(/<title>(.*?)<\/title>/);
+                if (match && match[1]) {
+                    let safe = match[1].replace(/[^a-zA-Z0-9가-힣\s\-_]/g, "").trim().replace(/\s+/g, "_");
+                    if (safe) filenameInput.value = safe;
+                }
+            }
+        });
+
+        /* [4] 미리보기 업데이트 함수 (중복 제거) */
+        function updatePreview() {
+            const html = codeInput.value;
+            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            doc.open(); 
+            doc.write(html); 
+            doc.close();
+        }
+
+        // 수동 파일명 변경 감지
+        filenameInput.addEventListener('input', () => { 
+            isManuallyChanged = true; 
+            if(filenameInput.value.trim() === "") isManuallyChanged = false; 
+        });
+
+        /* [5] 드래그 리사이징 로직 */
         resizer.addEventListener('mousedown', () => { isResizing = true; resizer.classList.add('resizing'); document.body.classList.add('is-resizing'); dragOverlay.style.display = 'block'; });
         document.addEventListener('mousemove', (e) => { if (!isResizing) return; const w = (e.clientX / workspace.offsetWidth) * 100; if (w > 10 && w < 90) editorPane.style.width = w + '%'; });
         document.addEventListener('mouseup', () => { isResizing = false; resizer.classList.remove('resizing'); document.body.classList.remove('is-resizing'); dragOverlay.style.display = 'none'; });
 
+        /* [6] 모바일/데스크탑 뷰 전환 */
         function setDevice(type) {
             const wrapper = document.getElementById('iframeWrapper');
             document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
@@ -266,19 +321,7 @@
             type === 'mobile' ? wrapper.classList.add('mobile-mode') : wrapper.classList.remove('mobile-mode');
         }
 
-        codeInput.addEventListener('input', () => {
-            const html = codeInput.value;
-            previewFrame.contentDocument.open(); previewFrame.contentDocument.write(html); previewFrame.contentDocument.close();
-            if (!isManuallyChanged) {
-                const match = html.match(/<title>(.*?)<\/title>/);
-                if (match && match[1]) {
-                    let safe = match[1].replace(/[^a-zA-Z0-9가-힣\s\-_]/g, "").trim().replace(/\s+/g, "_");
-                    if (safe) filenameInput.value = safe;
-                }
-            }
-        });
-        filenameInput.addEventListener('input', () => { isManuallyChanged = true; if(filenameInput.value.trim() === "") isManuallyChanged = false; });
-
+        /* [7] 다운로드 관련 함수 */
         function startDownloadProcess() {
             if (!codeInput.value.trim()) return showToast("Nothing to download!", true);
             const modal = document.getElementById('downloadModal'); const spinner = document.getElementById('spinner'); const msg = document.getElementById('download-msg');
@@ -289,96 +332,69 @@
             const blob = new Blob([codeInput.value], { type: "text/html" }); const url = URL.createObjectURL(blob);
             const a = document.createElement("a"); a.href = url; a.download = (filenameInput.value.trim() || "index") + ".html"; a.click(); URL.revokeObjectURL(url);
         }
+
+        /* [8] 모달 및 초기화 관련 */
         function openResetModal() { if (codeInput.value.trim()) document.getElementById('resetModal').style.display = 'flex'; }
         function closeResetModal() { document.getElementById('resetModal').style.display = 'none'; }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function confirmReset() { codeInput.value = ""; filenameInput.value = "index"; isManuallyChanged = false; previewFrame.contentDocument.open(); previewFrame.contentDocument.close(); closeResetModal(); showToast("Cleared!"); }
+        
+        function confirmReset() { 
+            codeInput.value = ""; 
+            filenameInput.value = "index"; 
+            isManuallyChanged = false; 
+            updatePreview(); // 화면 지우기
+            localStorage.removeItem(STORAGE_KEY); // 🔥 저장된 내용도 삭제
+            closeResetModal(); 
+            showToast("Cleared!"); 
+        }
+
+        /* [9] 유틸리티 함수 */
         function copyCode() { if (!codeInput.value.trim()) return; navigator.clipboard.writeText(codeInput.value); showToast("Copied!"); }
         function showToast(msg, isError = false) { const t = document.getElementById('toast'); t.innerHTML = (isError ? '<i class="fas fa-exclamation-circle" style="color:#ef4444"></i> ' : '<i class="fas fa-check-circle" style="color:#4ade80"></i> ') + msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
-
-        // 404 에러 등을 만났을 때 에디터의 코드를 다시 미리보기에 밀어넣는 함수입니다.
-function refreshPreview() {
-    const html = codeInput.value;
-    previewFrame.contentDocument.open();
-    previewFrame.contentDocument.write(html);
-    previewFrame.contentDocument.close();
-    showToast("Preview Refreshed!");
-}
-    // 📂 파일 읽어오기 함수
-function loadFile(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const content = e.target.result;
         
-        // 1. 에디터에 내용 채우기
-        codeInput.value = content;
-        
-        // 2. 미리보기 화면 갱신하기
-        previewFrame.contentDocument.open();
-        previewFrame.contentDocument.write(content);
-        previewFrame.contentDocument.close();
-        
-        // 3. 파일 이름 자동으로 입력해주기 (확장자 떼고)
-        const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
-        filenameInput.value = nameWithoutExt;
-        
-        showToast("File Loaded!");
-    };
-    reader.readAsText(file);
-}
-// 1. 기본 HTML 뼈대 넣어주는 함수
-function insertTemplate() {
-    if(codeInput.value.trim() !== "" && !confirm("Overwrite current code?")) return;
-    
-    const template = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Page</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; text-align: center; }
-        h1 { color: #2563eb; }
-        button { padding: 10px 20px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <h1>Hello, World!</h1>
-    <p>This is my first page.</p>
-    <button onclick="alert('Clicked!')">Click Me</button>
-</body>
-</html>`;
-    
-    codeInput.value = template;
-    previewFrame.contentDocument.open();
-    previewFrame.contentDocument.write(template);
-    previewFrame.contentDocument.close();
-}
+        // 새로고침 버튼용 (404 에러 시 복구)
+        function refreshPreview() {
+            updatePreview();
+            showToast("Preview Refreshed!");
+        }
 
-// 2. 더미 텍스트(Lorem Ipsum) 넣어주는 함수 (커서 위치에 삽입)
-function insertLorem() {
-    const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
-    
-    // 현재 커서 위치에 글자 끼워넣기 (조금 고급 기술!)
-    const start = codeInput.selectionStart;
-    const end = codeInput.selectionEnd;
-    const text = codeInput.value;
-    
-    codeInput.value = text.substring(0, start) + lorem + text.substring(end);
-    
-    // 커서 위치 다시 잡아주기
-    codeInput.selectionStart = codeInput.selectionEnd = start + lorem.length;
-    
-    // 미리보기 갱신
-    previewFrame.contentDocument.open();
-    previewFrame.contentDocument.write(codeInput.value);
-    previewFrame.contentDocument.close();
-}
+        /* [10] 파일 불러오기 */
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                codeInput.value = content;
+                updatePreview();
+                localStorage.setItem(STORAGE_KEY, content); // 🔥 불러온 파일도 자동 저장
+                
+                const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+                filenameInput.value = nameWithoutExt;
+                showToast("File Loaded!");
+            };
+            reader.readAsText(file);
+        }
 
+        /* [11] 템플릿 삽입 */
+        function insertTemplate() {
+            if(codeInput.value.trim() !== "" && !confirm("Overwrite current code?")) return;
+            const template = `<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>My Page</title>\n    <style>\n        body { font-family: sans-serif; padding: 20px; text-align: center; }\n        h1 { color: #2563eb; }\n        button { padding: 10px 20px; cursor: pointer; }\n    </style>\n</head>\n<body>\n    <h1>Hello, World!</h1>\n    <p>This is my first page.</p>\n    <button onclick="alert('Clicked!')">Click Me</button>\n</body>\n</html>`;
+            codeInput.value = template;
+            updatePreview();
+            localStorage.setItem(STORAGE_KEY, template); // 🔥 템플릿도 자동 저장
+        }
+
+        /* [12] 로렘 입숨 삽입 */
+        function insertLorem() {
+            const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+            const start = codeInput.selectionStart;
+            const end = codeInput.selectionEnd;
+            const text = codeInput.value;
+            codeInput.value = text.substring(0, start) + lorem + text.substring(end);
+            codeInput.selectionStart = codeInput.selectionEnd = start + lorem.length;
+            updatePreview();
+            localStorage.setItem(STORAGE_KEY, codeInput.value); // 🔥 변경사항 저장
+        }
     </script>
-</body>
-</html>
