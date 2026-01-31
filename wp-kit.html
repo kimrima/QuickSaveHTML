@@ -16,7 +16,7 @@
             --border: #374151;
         }
         
-        /* Body Layout: 전체 화면을 세로로 꽉 채우는 Flex 박스 */
+        /* Body Layout */
         body { 
             margin: 0; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -34,12 +34,12 @@
         .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
         .nav-link.active { color: #60a5fa; background: rgba(37, 99, 235, 0.1); }
 
-        /* [3] Layout (핵심 수정 부분) */
+        /* [3] Layout */
         .workspace { 
             display: flex; 
-            flex: 1; /* 남는 공간을 모두 차지함 */
-            overflow: hidden; /* 내부 스크롤 허용 */
-            height: auto; /* 고정 높이 제거 */
+            flex: 1; 
+            overflow: hidden; 
+            height: auto; 
         }
         
         .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
@@ -50,8 +50,15 @@
         .tool-btn.active { background: rgba(37, 99, 235, 0.1); border-left-color: var(--primary); color: white; font-weight: 600; }
 
         .main-panel { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        
+        /* Config Box */
         .config-box { background: var(--bg-panel); padding: 20px; border-radius: 6px; border: 1px solid var(--border); }
-        .config-title { margin: 0 0 20px 0; color: white; font-size: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        
+        /* 🔥 [수정 1] 리셋 버튼을 위한 헤더 스타일 추가 */
+        .config-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .config-title { margin: 0; color: white; font-size: 18px; }
+        .reset-btn { background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .reset-btn:hover { background: #ef4444; color: white; }
 
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; color: var(--text-sub); margin-bottom: 6px; font-size: 12px; }
@@ -68,14 +75,14 @@
         .copy-btn:hover { background: #15803d; }
         .section-label { color: var(--text-sub); font-size: 12px; margin-bottom: 8px; display: block; font-weight: 600; }
 
-        /* Footer 스타일 (고정 해제) */
+        /* Footer */
         footer {
             background-color: #0d1117; 
             border-top: 1px solid #30363d; 
             padding: 10px 0; 
             font-family: sans-serif; 
             line-height: 1.4;
-            flex-shrink: 0; /* 공간 부족해도 찌그러지지 않음 */
+            flex-shrink: 0;
             z-index: 100;
         }
 
@@ -116,7 +123,12 @@
             </div>
 
             <div class="config-box">
-                <h2 class="config-title" id="toolTitle">Select a Tool</h2>
+                <div class="config-header">
+                    <h2 class="config-title" id="toolTitle">Select a Tool</h2>
+                    <button class="reset-btn" onclick="resetTool()" title="Reset to Default">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
                 <div id="inputForm"></div>
             </div>
 
@@ -142,12 +154,15 @@
             <div style="display: flex; gap: 10px; align-items: center;">
                 <a href="https://unitools.store" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🛠️ UniTools</a>
                 <a href="https://whatsthatthing.net" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🔍 What's That Thing</a>
-                <a href="https://fidnmysite.site" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🌐 FindMySite</a>
+                <a href="https://findmysite.site" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">🌐 FindMySite</a>
                 <a href="https://recipehub.store" target="_blank" style="color: #c9d1d9; text-decoration: none; font-size: 11px;">👨‍🍳 RecipeHub</a>
             </div>
         </div>
         <div style="text-align: center; font-size: 10px; color: #484f58;">
-            <span onclick="openModal('privacyModal')" style="cursor:pointer; margin: 0 6px;">Privacy</span> | <span onclick="openModal('termsModal')" style="cursor:pointer; margin: 0 6px;">Terms</span> | <span style="margin-left: 6px;">© 2026 QuickSaveHTML</span>
+            <a href="blog.html" style="color: #484f58; text-decoration: none; margin-right: 6px;">Blog</a> | 
+            <span onclick="openModal('privacyModal')" style="cursor:pointer; margin: 0 6px;">Privacy</span> | 
+            <span onclick="openModal('termsModal')" style="cursor:pointer; margin: 0 6px;">Terms</span> | 
+            <span style="margin-left: 6px;">© 2026 QuickSaveHTML</span>
         </div>
     </footer>
 
@@ -391,7 +406,7 @@
             }
         ];
 
-        // --- Core Logic (with Auto-Save) ---
+        // --- Core Logic ---
         let currentTool = null;
         function init() {
             const menu = document.getElementById('sidebarMenu');
@@ -422,12 +437,10 @@
 
         function selectTool(id, element) {
             currentTool = tools.find(t => t.id === id);
-            localStorage.setItem('wp-last-tool', id); // Save current tool
+            localStorage.setItem('wp-last-tool', id);
 
-            // UI Active State
             document.querySelectorAll('.tool-btn').forEach(el => el.classList.remove('active'));
             if(!element) {
-                // If loaded from storage, find the button manually
                 const btns = document.querySelectorAll('.tool-btn');
                 for(let b of btns) if(b.textContent === currentTool.name) { b.classList.add('active'); break; }
             } else { element.classList.add('active'); }
@@ -436,7 +449,7 @@
             const formBox = document.getElementById('inputForm');
             formBox.innerHTML = '';
 
-            // Load saved input values
+            // Load saved input values or Default
             const savedData = JSON.parse(localStorage.getItem('wp-data-' + id) || '{}');
 
             currentTool.inputs.forEach(inp => {
@@ -455,7 +468,7 @@
                     }
                 } else { inputEl = document.createElement('input'); inputEl.type = inp.type; }
                 
-                // Set value from storage OR default
+                // Prioritize Saved > Default
                 inputEl.value = savedData[inp.id] !== undefined ? savedData[inp.id] : inp.val;
                 
                 if (inp.placeholder) inputEl.placeholder = inp.placeholder;
@@ -479,12 +492,30 @@
             const data = {};
             currentTool.inputs.forEach(inp => { data[inp.id] = document.getElementById(`inp-${inp.id}`).value; });
             
-            // Save inputs to LocalStorage
+            // Auto Save
             localStorage.setItem('wp-data-' + currentTool.id, JSON.stringify(data));
 
             const html = currentTool.template(data);
             document.getElementById('previewBox').innerHTML = html;
             document.getElementById('resultCode').value = html;
+        }
+
+        // 🔥 [수정 3] 초기화 함수 추가
+        function resetTool() {
+            if(!currentTool) return;
+            if(confirm("Are you sure you want to reset this tool to default settings?")) {
+                // 1. 저장소에서 데이터 삭제
+                localStorage.removeItem('wp-data-' + currentTool.id);
+                
+                // 2. 현재 도구 다시 로드 (그러면 저장된 게 없으니 기본값 불러옴)
+                selectTool(currentTool.id, document.querySelector('.tool-btn.active'));
+                
+                // 3. 버튼 텍스트 깜빡임 (피드백)
+                const btn = document.querySelector('.reset-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Reset!';
+                setTimeout(() => btn.innerHTML = originalText, 1500);
+            }
         }
 
         function copyCode() {
