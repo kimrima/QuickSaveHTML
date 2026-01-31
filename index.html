@@ -245,10 +245,10 @@
     </div>
     <div class="toast" id="toast">Copied!</div>
 
-   <script>
+<script>
         /* [1] 기본 변수 설정 */
         const codeInput = document.getElementById('code');
-        const previewFrame = document.getElementById('preview');
+        // previewFrame 변수는 아래 updatePreview 함수에서 매번 새로 찾으므로 전역변수에서 제거하거나 무시해도 됩니다.
         const filenameInput = document.getElementById('filename-input');
         const resizer = document.getElementById('resizer');
         const editorPane = document.getElementById('editorPane');
@@ -260,27 +260,29 @@
 
         let isManuallyChanged = false; 
         let isResizing = false;
+        
+        // ⏱️ 디바운스 타이머 (냄비 교체 딜레이용)
+        let debounceTimer;
 
         /* [2] 페이지 로드 시: 저장된 내용 불러오기 */
         window.onload = function() {
             const savedCode = localStorage.getItem(STORAGE_KEY);
             
             if (savedCode) {
-                // 저장된 내용이 있으면 불러오기
                 codeInput.value = savedCode;
-                updatePreview(); 
+                updatePreview(); // 저장된 코드로 화면 그리기
                 showToast("Auto-saved content loaded!");
             } else {
-                // 저장된 게 없으면 아무것도 안 하거나, 기본 템플릿을 비워둠
-                // 필요하면 여기서 insertTemplate() 호출 가능
+                // 저장된 게 없으면 기본 템플릿(선택사항)
             }
         };
 
-        /* [3] 에디터 입력 감지 (입력할 때마다 저장 + 미리보기 갱신) */
+        /* [3] 에디터 입력 감지 */
         codeInput.addEventListener('input', () => {
+            // 입력할 때마다 화면 갱신 요청
             updatePreview();
             
-            // 🔥 핵심: 입력할 때마다 브라우저에 저장
+            // 🔥 핵심 1: 입력할 때마다 브라우저에 저장 (Auto-Save)
             localStorage.setItem(STORAGE_KEY, codeInput.value);
 
             // 파일명 자동 추출 로직
@@ -293,13 +295,36 @@
             }
         });
 
-        /* [4] 미리보기 업데이트 함수 (중복 제거) */
+        /* [4] 미리보기 업데이트 함수 (🔥 핵심 2: 냄비 교체 기술 적용) */
         function updatePreview() {
-            const html = codeInput.value;
-            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-            doc.open(); 
-            doc.write(html); 
-            doc.close();
+            // 1. 타자 치는 중이면 대기
+            clearTimeout(debounceTimer);
+
+            // 2. 타자가 멈추고 0.3초 뒤에 실행
+            debounceTimer = setTimeout(() => {
+                const wrapper = document.getElementById('iframeWrapper');
+                const oldFrame = document.getElementById('preview');
+                const code = codeInput.value;
+
+                // 기존 iframe 삭제 (메모리 초기화)
+                if (oldFrame) {
+                    wrapper.removeChild(oldFrame);
+                }
+
+                // 새 iframe 생성
+                const newFrame = document.createElement('iframe');
+                newFrame.id = 'preview';
+                
+                // 모바일 모드인지 확인 후 클래스 유지 (필요하다면 CSS에서 iframeWrapper.mobile-mode iframe 로 제어하므로 여기선 ID만 주면 됨)
+                
+                wrapper.appendChild(newFrame);
+
+                // 코드 주입
+                const doc = newFrame.contentDocument || newFrame.contentWindow.document;
+                doc.open();
+                doc.write(code);
+                doc.close();
+            }, 300);
         }
 
         // 수동 파일명 변경 감지
@@ -343,8 +368,16 @@
             codeInput.value = ""; 
             filenameInput.value = "index"; 
             isManuallyChanged = false; 
-            updatePreview(); // 화면 지우기
-            localStorage.removeItem(STORAGE_KEY); // 🔥 저장된 내용도 삭제
+            
+            // 화면 지우기 (즉시 실행)
+            const wrapper = document.getElementById('iframeWrapper');
+            const oldFrame = document.getElementById('preview');
+            if(oldFrame) wrapper.removeChild(oldFrame);
+            const newFrame = document.createElement('iframe');
+            newFrame.id = 'preview';
+            wrapper.appendChild(newFrame);
+
+            localStorage.removeItem(STORAGE_KEY); // 🔥 저장된 내용 삭제
             closeResetModal(); 
             showToast("Cleared!"); 
         }
@@ -353,7 +386,7 @@
         function copyCode() { if (!codeInput.value.trim()) return; navigator.clipboard.writeText(codeInput.value); showToast("Copied!"); }
         function showToast(msg, isError = false) { const t = document.getElementById('toast'); t.innerHTML = (isError ? '<i class="fas fa-exclamation-circle" style="color:#ef4444"></i> ' : '<i class="fas fa-check-circle" style="color:#4ade80"></i> ') + msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
         
-        // 새로고침 버튼용 (404 에러 시 복구)
+        // 새로고침 버튼용
         function refreshPreview() {
             updatePreview();
             showToast("Preview Refreshed!");
@@ -368,7 +401,7 @@
                 const content = e.target.result;
                 codeInput.value = content;
                 updatePreview();
-                localStorage.setItem(STORAGE_KEY, content); // 🔥 불러온 파일도 자동 저장
+                localStorage.setItem(STORAGE_KEY, content); // 🔥 불러온 파일 자동 저장
                 
                 const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
                 filenameInput.value = nameWithoutExt;
@@ -383,7 +416,7 @@
             const template = `<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>My Page</title>\n    <style>\n        body { font-family: sans-serif; padding: 20px; text-align: center; }\n        h1 { color: #2563eb; }\n        button { padding: 10px 20px; cursor: pointer; }\n    </style>\n</head>\n<body>\n    <h1>Hello, World!</h1>\n    <p>This is my first page.</p>\n    <button onclick="alert('Clicked!')">Click Me</button>\n</body>\n</html>`;
             codeInput.value = template;
             updatePreview();
-            localStorage.setItem(STORAGE_KEY, template); // 🔥 템플릿도 자동 저장
+            localStorage.setItem(STORAGE_KEY, template); 
         }
 
         /* [12] 로렘 입숨 삽입 */
@@ -395,6 +428,6 @@
             codeInput.value = text.substring(0, start) + lorem + text.substring(end);
             codeInput.selectionStart = codeInput.selectionEnd = start + lorem.length;
             updatePreview();
-            localStorage.setItem(STORAGE_KEY, codeInput.value); // 🔥 변경사항 저장
+            localStorage.setItem(STORAGE_KEY, codeInput.value); 
         }
     </script>
